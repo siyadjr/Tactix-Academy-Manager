@@ -1,9 +1,4 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/Theme/button_style.dart';
@@ -12,24 +7,18 @@ import 'package:tactix_academy_manager/Model/Firebase/Authentication%20funcation
 import 'package:tactix_academy_manager/View/Authentications/Widgets/or_sign_with_google.dart';
 import 'package:tactix_academy_manager/View/Authentications/Widgets/sign_in_widget.dart';
 import 'package:tactix_academy_manager/View/Authentications/Widgets/to_signup_page.dart';
-import 'package:tactix_academy_manager/View/HomeScreen/home_screen.dart';
 
-class SignIn extends StatefulWidget {
+class SignIn extends StatelessWidget {
   const SignIn({super.key});
 
   @override
-  _SignInState createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
-  @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
+
+    final _formKey = GlobalKey<FormState>();
+
     return CustomScaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -50,10 +39,11 @@ class _SignInState extends State<SignIn> {
                   ),
                   const SizedBox(height: 20.0),
                   SignInWidget(
-                      nameController: nameController,
-                      formKey: _formKey,
-                      emailController: emailController,
-                      passwordController: passwordController),
+                    nameController: nameController,
+                    formKey: _formKey,
+                    emailController: emailController,
+                    passwordController: passwordController,
+                  ),
                   const SizedBox(height: 10.0),
                   Align(
                     alignment: Alignment.centerRight,
@@ -70,10 +60,11 @@ class _SignInState extends State<SignIn> {
                     onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
                         await UserDatbase().signInWithEmailPassword(
-                            context,
-                            emailController,
-                            passwordController,
-                            nameController);
+                          context,
+                          emailController,
+                          passwordController,
+                          nameController,
+                        );
                       }
                     },
                     style: elevatedButtonStyle,

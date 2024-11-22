@@ -12,7 +12,6 @@ class UserDatbase {
   Future<void> signUpWithEmailPassword(BuildContext context, String name,
       String email, String password, String teamId) async {
     try {
-      // Firebase Authentication for user creation
       final UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
 
@@ -175,6 +174,25 @@ class UserDatbase {
       }
     } catch (e) {
       log("Error during Google Sign-In: $e");
+    }
+  }
+
+  Future<void> uploadLicense(String imagePath) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        throw Exception("No authenticated user found.");
+      }
+
+      await FirebaseFirestore.instance
+          .collection('Managers')
+          .doc(user.uid)
+          .update({'licenseUrl': imagePath});
+
+      log("License uploaded successfully.");
+    } catch (e) {
+      log("Error uploading license: $e");
     }
   }
 }
