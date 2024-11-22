@@ -1,30 +1,33 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:tactix_academy_manager/Controller/license_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/Theme/button_style.dart';
 import 'package:tactix_academy_manager/Core/Theme/custom_scaffold.dart';
+import 'package:tactix_academy_manager/Model/Firebase/Authentication%20funcations/user.db.dart';
+import 'package:tactix_academy_manager/View/Authentications/Widgets/licence_header.dart';
+import 'package:tactix_academy_manager/View/Authentications/Widgets/upload_container.dart';
 
 class CoachingLicenseScreen extends StatelessWidget {
-  const CoachingLicenseScreen({super.key});
+  CoachingLicenseScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildHeader(),
+              const SizedBox(height: 40),
+              const LicenceHeaderFiles(),
+              const SizedBox(height: 40),
+              UploadContainer(context: context),
               const SizedBox(height: 30),
-              _buildUploadSection(context),
+              Center(child: buildRequestButton(context)),
               const SizedBox(height: 30),
-              _buildRequestButton(),
-              const SizedBox(height: 20),
-              _buildFooterText(),
+              buildFooterText(),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -32,113 +35,55 @@ class CoachingLicenseScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
-    return Column(
-      children: [
-        Text(
-          "Coaching License Verification",
-          style: TextStyle(
-            fontSize: 24,
-            color: Colors.purple[800],
-            fontWeight: FontWeight.w700,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 10),
-        Text(
-          "Please upload your professional coaching license for evaluation",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            color: mainTextColour.withOpacity(0.7),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildUploadSection(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
-          colors: [
-            Colors.purple.withOpacity(0.05),
-            Colors.purple.withOpacity(0.1),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        border: Border.all(
-          color: Colors.purple.withOpacity(0.2),
-          width: 1.5,
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
-      child: Column(
-        children: [
-          Image.asset(
-            'Assets/fitness traking.png', // Assume you have this SVG
-            height: 80,
-            color: Colors.purple[700],
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton.icon(
-            onPressed: () {
-              log("Upload clicked");
-              // Implement file upload logic
-            },
-            icon: const Icon(Icons.upload_file, color: Colors.white),
-            label: const Text(
-              "Upload License",
-              style: TextStyle(color: Colors.white),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.purple[700],
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 3,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRequestButton() {
+  Widget buildRequestButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          log("Request clicked");
-          // Implement request logic
+          final imagePath = context.read<LicenseProvider>().imagePath;
+          if (imagePath.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              // ignore: prefer_const_constructors
+              SnackBar(
+                content: const Text(
+                  "Please upload a license before submitting.",
+                  textAlign: TextAlign.center,
+                ),
+                backgroundColor: backGroundColor,
+              ),
+            );
+          } else {
+            UserDatbase().uploadLicense(imagePath);
+          }
         },
         style: elevatedButtonStyle.copyWith(
           padding: WidgetStateProperty.all(
-            const EdgeInsets.symmetric(vertical: 15),
+            const EdgeInsets.symmetric(vertical: 14),
           ),
         ),
         child: const Text(
           "Request License Verification",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
+            color: Colors.white,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildFooterText() {
-    return Text(
-      "License evaluation typically takes up to 20 minutes.\nPlease ensure all documents are clear and legible.",
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 14,
-        color: secondTextColour.withOpacity(0.7),
-        fontStyle: FontStyle.italic,
+  Widget buildFooterText() {
+    return Center(
+      child: Text(
+        "License evaluation typically takes up to 20 minutes.\nPlease ensure all documents are clear and legible.",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 14,
+          color: secondTextColour.withOpacity(0.7),
+          fontStyle: FontStyle.italic,
+          height: 1.5,
+        ),
       ),
     );
   }
