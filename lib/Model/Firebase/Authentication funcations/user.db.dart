@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tactix_academy_manager/Controller/Api/cloudinery_class.dart';
+import 'package:tactix_academy_manager/Core/Theme/SharedPrefernce/shared_pref_functions.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/View/Authentications/lisence_request.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/home_screen.dart';
@@ -27,6 +29,8 @@ class UserDatbase {
           'email': email,
           'password': password,
           'teamId': teamId.isNotEmpty ? teamId : 'Not Assigned',
+          'licenseUrl': 'Not Assigned',
+          'license status': 'Not Assigned'
         });
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (ctx) => CoachingLicenseScreen()));
@@ -63,6 +67,7 @@ class UserDatbase {
       final user = userCredential.user;
 
       if (user != null) {
+        final photo = await CloudineryClass().uploadProfile(user.photoURL!);
         await FirebaseFirestore.instance
             .collection('Managers')
             .doc(user.uid)
@@ -70,9 +75,13 @@ class UserDatbase {
           'name': user.displayName ?? 'Google User',
           'email': user.email,
           'password': user.photoURL,
+          'userProfile': photo,
           'teamId': 'Not Assigned',
+          'licenseUrl': 'Not Assigned',
+          'license status': 'Not Assigned'
         });
-        Navigator.push(context,
+        SharedPrefFunctions().sharedPrefSignup();
+        Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (ctx) => CoachingLicenseScreen()));
 
         log("Google sign-in successful, data stored in Firestore.");
@@ -94,7 +103,11 @@ class UserDatbase {
       final password = passwordController.text.trim();
       final name = nameController.text.trim();
 
-      // Fetch user data from Firestore
+      // Firebase Authentication: Sign in with email and password
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      // Fetch user data from Firestore to match the name (optional, if required)
       final QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('Managers')
           .where('email', isEqualTo: email)
@@ -110,26 +123,33 @@ class UserDatbase {
       final userDoc = snapshot.docs.first;
       final userData = userDoc.data() as Map<String, dynamic>;
 
-      // Validate password and name
-      if (userData['password'] == password && userData['name'] == name) {
+      // Check if the name matches (optional, if required)
+      if (userData['name'] == name) {
         log("Sign-in successful. Navigating to HomeScreen.");
-
+        SharedPrefFunctions().sharedPrefSignup();
         // Navigate to HomeScreen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
       } else {
-        // Invalid credentials
-        if (userData['password'] != password) {
-          log("Invalid password.");
-          showSnackBar(context, "Incorrect password.");
-        } else {
-          log("Invalid name.");
-          showSnackBar(context, "Incorrect name.");
-        }
+        log("Invalid name.");
+        showSnackBar(context, "Incorrect name.");
+      }
+    } on FirebaseAuthException catch (e) {
+      // Handle Firebase Authentication errors
+      if (e.code == 'user-not-found') {
+        log("No user found for the given email.");
+        showSnackBar(context, "No user found for this email.");
+      } else if (e.code == 'wrong-password') {
+        log("Incorrect password.");
+        showSnackBar(context, "Incorrect password.");
+      } else {
+        log("Error during sign-in: $e");
+        showSnackBar(context, "An error occurred. Please try again.");
       }
     } catch (e) {
+      // Catch any other errors
       log("Error during sign-in: $e");
       showSnackBar(context, "An error occurred. Please try again.");
     }
@@ -188,7 +208,7 @@ class UserDatbase {
       await FirebaseFirestore.instance
           .collection('Managers')
           .doc(user.uid)
-          .update({'licenseUrl': imagePath});
+          .update({'licenseUrl': imagePath, 'license status': 'pending'});
 
       log("License uploaded successfully.");
     } catch (e) {
