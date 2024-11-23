@@ -1,9 +1,5 @@
-import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/Theme/button_style.dart';
@@ -12,7 +8,6 @@ import 'package:tactix_academy_manager/Model/Firebase/Authentication%20funcation
 import 'package:tactix_academy_manager/View/Authentications/Widgets/or_sign_with_google.dart';
 import 'package:tactix_academy_manager/View/Authentications/Widgets/sign_in_widget.dart';
 import 'package:tactix_academy_manager/View/Authentications/Widgets/to_sign_inpage.dart';
-import 'package:tactix_academy_manager/View/Authentications/splash_screen.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({super.key});

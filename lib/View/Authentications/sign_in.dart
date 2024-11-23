@@ -7,6 +7,7 @@ import 'package:tactix_academy_manager/Model/Firebase/Authentication%20funcation
 import 'package:tactix_academy_manager/View/Authentications/Widgets/or_sign_with_google.dart';
 import 'package:tactix_academy_manager/View/Authentications/Widgets/sign_in_widget.dart';
 import 'package:tactix_academy_manager/View/Authentications/Widgets/to_signup_page.dart';
+import 'package:tactix_academy_manager/View/Authentications/forgot_password.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -48,7 +49,12 @@ class SignIn extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (ctx) => ForgotPasswordScreen()));
+                      },
                       child: const Text(
                         'Forgot Password?',
                         style: TextStyle(color: mainTextColour),
