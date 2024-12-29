@@ -12,6 +12,10 @@ key.properties
 **/*.keystore
 **/*.jks
 # Firebase files
-firebase_options.dart
-google-services.json
-GoogleService-Info.plist
+
+
+# Sensitive files (ensure this is valid and necessary for your project)
+lib/firebase_options.dart
+android/app/google-services.json
+lib/Controller/Api/cloudinery_class.dart
+lib/Core

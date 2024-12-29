@@ -18,29 +18,32 @@ class CoachingLicenseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              const LicenceHeaderFiles(),
-              const SizedBox(height: 40),
-              UploadContainer(context: context),
-              const SizedBox(height: 30),
-              Center(child: buildRequestButton(context)),
-              const SizedBox(height: 30),
-              buildFooterText(),
-              const SizedBox(height: 40),
-              _buildLicenseStatusStream(context),
-            ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 40),
+                const LicenceHeaderFiles(),
+                const SizedBox(height: 40),
+                UploadContainer(context: context),
+                const SizedBox(height: 30),
+                Center(child: buildRequestButton(context)),
+                const SizedBox(height: 30),
+                buildFooterText(),
+                const SizedBox(height: 40),
+                _buildLicenseStatusStream(context),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  // Stream to listen to the license status
   Widget _buildLicenseStatusStream(BuildContext context) {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
