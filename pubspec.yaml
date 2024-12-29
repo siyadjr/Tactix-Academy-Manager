@@ -47,6 +47,10 @@ dependencies:
   image_picker: ^1.1.2
   cloudinary: ^1.2.0
   shared_preferences: ^2.3.3
+  flutter_animate: ^4.5.2
+  flutter_animator: ^3.2.2
+  intl: ^0.20.1
+  flutter_staggered_grid_view: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +81,12 @@ flutter:
     - Assets/onboarding2.png
     - Assets/image.jpg
     - Assets/fitness traking.png
+    - Assets/default_team.logo.png
+    - Assets/Sessions.png
+    - Assets/BroadCast.png
+    - Assets/Players.png
+    - Assets/ChatHub image.png
+    - Assets/Default avatar.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

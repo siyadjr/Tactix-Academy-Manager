@@ -1,127 +1,207 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tactix_academy_manager/Controller/team_creation_provider.dart';
+import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
+import 'package:tactix_academy_manager/Core/Theme/custom_scaffold.dart';
+import 'package:tactix_academy_manager/Model/Normal%20Functions/team_normal_function.dart';
+import 'package:tactix_academy_manager/View/Authentications/Team%20Creation/Widgets/team_create_welcome.dart';
+import 'package:tactix_academy_manager/View/Authentications/Team%20Creation/Widgets/team_photo_upload_container.dart';
+import 'package:tactix_academy_manager/View/HomeScreen/home_screen.dart';
+import 'Widgets/create_team_textfield.dart';
+import 'Widgets/info_card.dart';
 
 class TeamCreate extends StatelessWidget {
   const TeamCreate({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF1C1C2B), // Dark background
-      appBar: AppBar(
-        title: const Text('Welcome User'),
-        backgroundColor: const Color(0xFF1C1C2B),
-        elevation: 0,
-        actions: const [],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Title with color
-              const Text(
-                'Lets Create Your ELITE SQUAD',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF8A4BFF), // Purple color
-                ),
-              ),
-              const SizedBox(height: 20),
+    final provider = Provider.of<TeamCreationProvider>(context, listen: true);
+    final TextEditingController teamNameController = TextEditingController();
+    final TextEditingController locationController = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
 
-              // Team logo
-              GestureDetector(
-                onTap: () {
-                  // Handle logo upload
-                },
-                child: Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.white),
+    return CustomScaffold(
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                const TeamCreateWelcome(),
+                const SizedBox(height: 20),
+                _buildImageUploadSection(provider),
+                const SizedBox(height: 20),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      CreateTeamTexttField(
+                        label: "TEAM NAME",
+                        hintText: "Enter your team name",
+                        icon: Icons.sports_soccer,
+                        controller: teamNameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Team name is required";
+                          }
+                          if (value.length < 3) {
+                            return "Team name must be at least 3 characters long";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      CreateTeamTexttField(
+                        label: "LOCATION",
+                        hintText: "Enter your location",
+                        icon: Icons.location_on,
+                        controller: locationController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Location is required";
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
                   ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.upload,
-                      color: Colors.black,
-                      size: 50,
+                ),
+                const SizedBox(height: 20),
+                if (provider.isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _addTeam(
+                            context,
+                            teamNameController.text,
+                            locationController.text,
+                            provider,
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: mainTextColour,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        elevation: 8,
+                        shadowColor: mainTextColour,
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.sports_basketball),
+                          SizedBox(width: 8),
+                          Text(
+                            "CREATE SQUAD",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Team Name input
-              const TextField(
-                decoration: InputDecoration(
-                  labelText: 'Team Name',
-                  labelStyle: TextStyle(color: Colors.white),
-                  filled: true,
-                  fillColor: Color(0xFF2A2A3D),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              // Location input
-              const TextField(
-                decoration: InputDecoration(
-                  labelText: 'Location',
-                  labelStyle: TextStyle(color: Colors.white),
-                  filled: true,
-                  fillColor: Color(0xFF2A2A3D),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Enter button
-              ElevatedButton(
-                onPressed: () {
-                  // Handle team creation logic here
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF8A4BFF), // Purple color
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  'Enter',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Footer text
-              const Text(
-                'After creating a team, you’ll receive a unique Team ID. Share this ID with your players, so they can use it to join your Elite Squad.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                const InfoCard(),
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+Widget _buildImageUploadSection(TeamCreationProvider provider) {
+  return Center(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildImageContainer(
+          onTap: () {
+            provider.pickImage();
+          },
+          child: provider.uploadedImagePath != provider.defaultImagePath
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.file(
+                    File(provider.uploadedImagePath),
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : const TeamPhotoUploadContainer(),
+        ),
+        const SizedBox(width: 20),
+        _buildImageContainer(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.asset(
+              'Assets/default_team.logo.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildImageContainer({Widget? child, VoidCallback? onTap}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      height: 120,
+      width: 120,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: mainTextColour, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: mainTextColour.withOpacity(0.2),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: child,
+    ),
+  );
+}
+
+Future<void> _addTeam(BuildContext context, String teamName, String location,
+    TeamCreationProvider provider) async {
+  provider.setLoading(true); // Show loading indicator
+
+  try {
+    await teamCreationFunction(teamName, location, provider.uploadedImagePath);
+    log(provider.uploadedImagePath);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (ctx) => const HomeScreen()),
+      (_) => true,
+    );
+  } catch (e) {
+    log("Error creating team: $e");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Failed to create team. Please try again.")),
+    );
+  } finally {
+    provider.setLoading(false); // Hide loading indicator
   }
 }

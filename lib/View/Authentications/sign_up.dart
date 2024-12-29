@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
@@ -10,7 +9,9 @@ import 'package:tactix_academy_manager/View/Authentications/Widgets/sign_in_widg
 import 'package:tactix_academy_manager/View/Authentications/Widgets/to_sign_inpage.dart';
 
 class SignUp extends StatelessWidget {
-  const SignUp({super.key});
+  SignUp({super.key});
+
+  final ValueNotifier<bool> isLoading = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -46,29 +47,46 @@ class SignUp extends StatelessWidget {
                     passwordController: passwordController,
                   ),
                   const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        await UserDatbase().signUpWithEmailPassword(
-                            context,
-                            nameController.text.trim(),
-                            emailController.text.trim(),
-                            passwordController.text.trim(),
-                            '');
-                      }
+                  ValueListenableBuilder<bool>(
+                    valueListenable: isLoading,
+                     builder: (context, loading, child) {
+                      return loading
+                          ? GestureDetector(
+                              onTap: () {
+                                isLoading.value = false;
+                              },
+                              child: const CircularProgressIndicator())
+                          : ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
+                                  isLoading.value = true;
+                                  await UserDatbase().signUpWithEmailPassword(
+                                    context,
+                                    nameController.text.trim(),
+                                    emailController.text.trim(),
+                                    passwordController.text.trim(),
+                                    '',
+                                  );
+                                  isLoading.value = false;
+                                }
+                              },
+                              style: elevatedButtonStyle,
+                              child: const Text(
+                                'Sign Up',
+                                style: TextStyle(color: secondTextColour),
+                              ),
+                            );
                     },
-                    style: elevatedButtonStyle,
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(color: secondTextColour),
-                    ),
                   ),
                   const SizedBox(height: 20.0),
                   const OrSignWIthGoogle(),
                   const SizedBox(height: 10.0),
                   IconButton(
-                    onPressed: () {
-                      UserDatbase().signupWithGoogle(context);
+                    onPressed: () async {
+                      isLoading.value = true;
+                      await UserDatbase().signupWithGoogle(context);
+                      isLoading.value = false;
                     },
                     icon: Brand(Brands.google),
                     iconSize: 40.0,

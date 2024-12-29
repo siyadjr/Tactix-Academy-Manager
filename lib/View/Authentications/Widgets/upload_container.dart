@@ -53,8 +53,8 @@ class UploadContainer extends StatelessWidget {
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: mainTextColour,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 32, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -83,14 +83,15 @@ class UploadContainer extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: backGroundColor,
       builder: (BuildContext context) {
         return SafeArea(
           child: Wrap(
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt, color: Colors.blue),
-                title: const Text("Camera"),
+                title:
+                    const Text("Camera", style: TextStyle(color: Colors.white)),
                 onTap: () {
                   Navigator.pop(context);
                   licenseProvider.pickImage(context, ImageSource.camera);
@@ -98,7 +99,8 @@ class UploadContainer extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library, color: Colors.green),
-                title: const Text("Gallery"),
+                title: const Text("Gallery",
+                    style: TextStyle(color: Colors.white)),
                 onTap: () {
                   Navigator.pop(context);
                   licenseProvider.pickImage(context, ImageSource.gallery);

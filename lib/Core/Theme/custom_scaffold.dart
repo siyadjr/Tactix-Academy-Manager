@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class CustomScaffold extends StatelessWidget {
   final Widget body;
-
-  const CustomScaffold({super.key, required this.body});
+  final PreferredSizeWidget? appBar;
+  const CustomScaffold({super.key, required this.body,this.appBar});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar,
       body: Stack(
         children: [
-       
           Container(
             width: MediaQuery.of(context).size.width * 5,
             height: MediaQuery.of(context).size.height * 5,
