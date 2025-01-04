@@ -1,0 +1,35 @@
+[33mcommit 5fb4349f40dbdfdf101914f7e4cc8b0c53640d9f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Siyad jr <siyadsiyad016@gmail.com>
+Date:   Sat Jan 4 14:05:10 2025 +0530
+
+    Corrected some issues
+
+[33mcommit da0b498851822f226c8c6790bd84db6e060410ed[m
+Author: Siyad jr <siyadsiyad016@gmail.com>
+Date:   Sun Dec 29 15:39:30 2024 +0530
+
+    Added Broadcast feature and Session adding
+
+[33mcommit 0c61dc5d9d87ca0ed2cc1edae429f8d4c0cd1e28[m
+Author: Siyad jr <siyadsiyad016@gmail.com>
+Date:   Sat Nov 23 19:25:39 2024 +0530
+
+    license request completed
+
+[33mcommit 6532db5705ceea3760ca52e8c84af004f325697f[m
+Author: Siyad jr <siyadsiyad016@gmail.com>
+Date:   Fri Nov 22 14:20:38 2024 +0530
+
+    Temporary commit to proceed with rebase
+
+[33mcommit e76768507b592b431779d7a6a35ba4f35282f547[m
+Author: Siyad jr <siyadsiyad016@gmail.com>
+Date:   Fri Nov 22 14:14:27 2024 +0530
+
+    Add new widgets and controller files
+
+[33mcommit bd52d1bbf866d3fd8bb87b3d2ccd9db39bdf3346[m
+Author: Siyad jr <siyadsiyad016@gmail.com>
+Date:   Thu Nov 21 20:16:22 2024 +0530
+
+    Initial commit
