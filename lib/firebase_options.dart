@@ -64,8 +64,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '756855490028',
     projectId: 'tactix-academy',
     storageBucket: 'tactix-academy.firebasestorage.app',
-    androidClientId: '756855490028-0qbqh1pk1vro1a0ukbhb5c3kgfurd59q.apps.googleusercontent.com',
-    iosClientId: '756855490028-3l4c455b5qvev9hp627oubgru3avf7gc.apps.googleusercontent.com',
+    androidClientId:
+        '756855490028-0qbqh1pk1vro1a0ukbhb5c3kgfurd59q.apps.googleusercontent.com',
+    iosClientId:
+        '756855490028-3l4c455b5qvev9hp627oubgru3avf7gc.apps.googleusercontent.com',
     iosBundleId: 'com.example.tactixAcademyManager',
   );
 
@@ -75,8 +77,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '756855490028',
     projectId: 'tactix-academy',
     storageBucket: 'tactix-academy.firebasestorage.app',
-    androidClientId: '756855490028-0qbqh1pk1vro1a0ukbhb5c3kgfurd59q.apps.googleusercontent.com',
-    iosClientId: '756855490028-3l4c455b5qvev9hp627oubgru3avf7gc.apps.googleusercontent.com',
+    androidClientId:
+        '756855490028-0qbqh1pk1vro1a0ukbhb5c3kgfurd59q.apps.googleusercontent.com',
+    iosClientId:
+        '756855490028-3l4c455b5qvev9hp627oubgru3avf7gc.apps.googleusercontent.com',
     iosBundleId: 'com.example.tactixAcademyManager',
   );
 
@@ -89,5 +93,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'tactix-academy.firebasestorage.app',
     measurementId: 'G-BQ8BKM5C14',
   );
-
 }
