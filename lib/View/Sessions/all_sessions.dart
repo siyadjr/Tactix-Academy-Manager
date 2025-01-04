@@ -4,6 +4,7 @@ import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/sessions_d
 import 'package:tactix_academy_manager/View/Sessions/Widgets/sessions_card.dart';
 import 'package:tactix_academy_manager/View/Sessions/add_sessions.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
+import 'package:tactix_academy_manager/View/Sessions/sessions_details.dart';
 
 class AllSessions extends StatelessWidget {
   const AllSessions({super.key});
@@ -19,9 +20,7 @@ class AllSessions extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
-            onPressed: () {
-            
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -47,7 +46,16 @@ class AllSessions extends StatelessWidget {
                 itemCount: sessions.length,
                 itemBuilder: (context, index) {
                   final session = sessions[index];
-                  return SessionCard(session: session);
+                  return SessionCard(
+                    session: session,
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) =>
+                                  SessionsDetails(session: session)));
+                    },
+                  );
                 },
               );
             }
@@ -55,7 +63,7 @@ class AllSessions extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.push(
+        onPressed: () => Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (ctx) => const AddSessions()),
         ),
@@ -111,17 +119,6 @@ class EmptyStateWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 32),
-            OutlinedButton.icon(
-              onPressed: onAddPressed,
-              icon: const Icon(Icons.add),
-              label: const Text('Create Session'),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
-              ),
-            ),
           ],
         ),
       ),

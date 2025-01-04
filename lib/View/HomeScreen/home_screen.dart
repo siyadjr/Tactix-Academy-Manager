@@ -8,6 +8,7 @@ import 'package:tactix_academy_manager/View/HomeScreen/Widgets/chat_hub_containe
 import 'package:tactix_academy_manager/View/HomeScreen/Widgets/main_features.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/Widgets/secondary_features.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/Widgets/team_basic_details.dart';
+import 'package:tactix_academy_manager/View/Players/all_players.dart';
 import 'package:tactix_academy_manager/View/Sessions/all_sessions.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -85,28 +86,31 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 50),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MainFeaturesHomeScreen(
-                  text: 'Sessions',
-                  color: Colors.blue,
-                  imagePath: 'Assets/Sessions.png',
-                  nextPage: AllSessions(),
-                ),
-                MainFeaturesHomeScreen(
-                  text: 'BroadCast',
-                  color: Colors.yellow,
-                  imagePath: 'Assets/BroadCast.png',
-                  nextPage: BroadCast(),
-                ),
-                MainFeaturesHomeScreen(
-                  text: 'Players',
-                  color: Colors.green,
-                  imagePath: 'Assets/Players.png',
-                  nextPage: BroadCast(),
-                ),
-              ],
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MainFeaturesHomeScreen(
+                    text: 'Sessions',
+                    color: Colors.blue,
+                    imagePath: 'Assets/Sessions.png',
+                    nextPage: AllSessions(),
+                  ),
+                  MainFeaturesHomeScreen(
+                    text: 'BroadCast',
+                    color: Colors.yellow,
+                    imagePath: 'Assets/BroadCast.png',
+                    nextPage: BroadCast(),
+                  ),
+                  MainFeaturesHomeScreen(
+                    text: 'Players',
+                    color: Colors.green,
+                    imagePath: 'Assets/Players.png',
+                    nextPage: AllPlayers(),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
             Row(
@@ -139,7 +143,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            ChatHubContainer(),
+            const ChatHubContainer(),
             const TeamBasicDetails(),
           ],
         ),

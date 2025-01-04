@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/add_session_controller.dart';
 import 'package:tactix_academy_manager/Controller/home_screen_provider.dart';
 import 'package:tactix_academy_manager/Controller/license_provider.dart';
+import 'package:tactix_academy_manager/Controller/license_request_controller.dart';
 import 'package:tactix_academy_manager/Controller/team_creation_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/View/Authentications/splash_screen.dart';
@@ -24,7 +25,8 @@ void main() async {
           create: (_) => TeamCreationProvider(),
         ),
         ChangeNotifierProvider(create: (_) => TeamProvider()),
-        ChangeNotifierProvider(create: (_) => AddSessionController())
+        ChangeNotifierProvider(create: (_) => AddSessionController()),
+        ChangeNotifierProvider(create: (_) => LicenseRequestController())
       ],
       child: const MyApp(),
     ),

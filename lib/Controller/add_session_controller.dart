@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:tactix_academy_manager/Controller/Api/cloudinery_class.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/sessions_database.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
@@ -11,6 +12,7 @@ class AddSessionController extends ChangeNotifier {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final locationController = TextEditingController();
+  DateTime? selectedDate;
   final picker = ImagePicker();
 
   String type = 'Training';
@@ -53,7 +55,7 @@ class AddSessionController extends ChangeNotifier {
           name: nameController.text,
           description: descriptionController.text,
           sessionType: type,
-          date: 'date',
+          date: selectedDate.toString(),
           imagePath: photo.toString(),
           location: locationController.text);
       await SessionsDatabase().addSessions(session);
@@ -62,7 +64,7 @@ class AddSessionController extends ChangeNotifier {
           context,
           MaterialPageRoute(
               builder: (ctx) =>
-                  AllSessions())); // Close the screen after submission
+                  const AllSessions())); // Close the screen after submission
     } catch (e) {
       _showErrorSnackBar(context, 'Failed to save session: $e');
     } finally {

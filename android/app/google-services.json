@@ -7,12 +7,100 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:756855490028:android:9c542521f16aae79d5acc9",
+        "android_client_info": {
+          "package_name": "com.admin_tactix.ap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "756855490028-2lbsfe3lltmk7u55na4g0v9pbdm7f870.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCYx2NT-80EGZpFG3b_nXI1j9Q4gHrXXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "756855490028-2lbsfe3lltmk7u55na4g0v9pbdm7f870.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "756855490028-3l4c455b5qvev9hp627oubgru3avf7gc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tactixAcademyManager"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:756855490028:android:2bcef3615534ba65d5acc9",
         "android_client_info": {
           "package_name": "com.example.tactix_academy_manager"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "756855490028-0qbqh1pk1vro1a0ukbhb5c3kgfurd59q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tactix_academy_manager",
+            "certificate_hash": "f18b5815cdf4098e03a2b1e738796409d89f6b17"
+          }
+        },
+        {
+          "client_id": "756855490028-2lbsfe3lltmk7u55na4g0v9pbdm7f870.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCYx2NT-80EGZpFG3b_nXI1j9Q4gHrXXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "756855490028-2lbsfe3lltmk7u55na4g0v9pbdm7f870.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "756855490028-3l4c455b5qvev9hp627oubgru3avf7gc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tactixAcademyManager"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756855490028:android:dcd43fc0c6f69852d5acc9",
+        "android_client_info": {
+          "package_name": "com.example.tactix_academy_players"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "756855490028-797fh69v2an431rpmjk0q9ma799gebp2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tactix_academy_players",
+            "certificate_hash": "f18b5815cdf4098e03a2b1e738796409d89f6b17"
+          }
+        },
         {
           "client_id": "756855490028-2lbsfe3lltmk7u55na4g0v9pbdm7f870.apps.googleusercontent.com",
           "client_type": 3
@@ -54,6 +142,50 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.tactix.academy",
+            "certificate_hash": "f18b5815cdf4098e03a2b1e738796409d89f6b17"
+          }
+        },
+        {
+          "client_id": "756855490028-2lbsfe3lltmk7u55na4g0v9pbdm7f870.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCYx2NT-80EGZpFG3b_nXI1j9Q4gHrXXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "756855490028-2lbsfe3lltmk7u55na4g0v9pbdm7f870.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "756855490028-3l4c455b5qvev9hp627oubgru3avf7gc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tactixAcademyManager"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756855490028:android:6a56af88de4b8933d5acc9",
+        "android_client_info": {
+          "package_name": "com.tactix_academy_admin.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "756855490028-vedp388j5m6vrm81jj0pm781ujotf9dl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tactix_academy_admin.app",
             "certificate_hash": "f18b5815cdf4098e03a2b1e738796409d89f6b17"
           }
         },

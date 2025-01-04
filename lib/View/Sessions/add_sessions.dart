@@ -24,7 +24,7 @@ class AddSessions extends StatelessWidget {
           body: Stack(
             children: [
               _buildForm(controller, context),
-              _buildSaveButton(controller, context),
+              // _buildSaveButton(controller, context),
             ],
           ),
         ),
@@ -36,7 +36,7 @@ class AddSessions extends StatelessWidget {
     return Form(
       key: controller.formKey,
       child: ListView(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: 16,
           left: 16,
           right: 16,

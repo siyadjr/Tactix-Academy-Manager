@@ -6,9 +6,16 @@ class SharedPrefFunctions {
     final sharedpref = await SharedPreferences.getInstance();
     final value = await sharedpref.setBool(userRegisterd, true);
   }
-  sharePrefTeamCreated()async{
+
+  sharePrefTeamCreated() async {
     final sharedpref = await SharedPreferences.getInstance();
-      await sharedpref.setBool(userAuthCompleated, true);
-         await sharedpref.setBool(userLoggedIn, true);
+    final value = await sharedpref.setBool(userRegisterd, true);
+    await sharedpref.setBool(userAuthCompleated, true);
+    await sharedpref.setBool(userLoggedIn, true);
+  }
+
+  sharePrefLogged() async {
+    final sharedpref = await SharedPreferences.getInstance();
+    await sharedpref.setBool(userLoggedIn, true);
   }
 }

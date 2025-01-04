@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/team_creation_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/Theme/custom_scaffold.dart';
+import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';
+import 'package:tactix_academy_manager/Model/Normal%20Functions/custom_showdialogue.dart';
 import 'package:tactix_academy_manager/Model/Normal%20Functions/team_normal_function.dart';
 import 'package:tactix_academy_manager/View/Authentications/Team%20Creation/Widgets/team_create_welcome.dart';
 import 'package:tactix_academy_manager/View/Authentications/Team%20Creation/Widgets/team_photo_upload_container.dart';
@@ -78,16 +80,18 @@ class TeamCreate extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _addTeam(
-                            context,
-                            teamNameController.text,
-                            locationController.text,
-                            provider,
-                          );
-                        }
-                      },
+                      onPressed: provider.isLoading
+                          ? null
+                          : () {
+                              if (_formKey.currentState!.validate()) {
+                                _addTeam(
+                                  context,
+                                  teamNameController.text,
+                                  locationController.text,
+                                  provider,
+                                );
+                              }
+                            },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: mainTextColour,
                         padding: const EdgeInsets.symmetric(vertical: 18),
@@ -97,22 +101,31 @@ class TeamCreate extends StatelessWidget {
                         elevation: 8,
                         shadowColor: mainTextColour,
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.sports_basketball),
-                          SizedBox(width: 8),
-                          Text(
-                            "CREATE SQUAD",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.2,
+                      child: provider.isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.sports_basketball),
+                                SizedBox(width: 8),
+                                Text(
+                                  "CREATE SQUAD",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 const SizedBox(height: 20),
@@ -186,15 +199,25 @@ Widget _buildImageContainer({Widget? child, VoidCallback? onTap}) {
 
 Future<void> _addTeam(BuildContext context, String teamName, String location,
     TeamCreationProvider provider) async {
-  provider.setLoading(true); // Show loading indicator
+  provider.setLoading(true);
 
   try {
     await teamCreationFunction(teamName, location, provider.uploadedImagePath);
+    String teamId = await TeamDatabase().getTeamId();
+
     log(provider.uploadedImagePath);
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (ctx) => const HomeScreen()),
-      (_) => true,
+
+    // Show custom dialog with team ID
+    showTeamIdDialog(
+      context: context,
+      teamId: teamId,
+      onNavigate: () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (ctx) => const HomeScreen()),
+          (_) => true,
+        );
+      },
     );
   } catch (e) {
     log("Error creating team: $e");
@@ -202,6 +225,6 @@ Future<void> _addTeam(BuildContext context, String teamName, String location,
       SnackBar(content: Text("Failed to create team. Please try again.")),
     );
   } finally {
-    provider.setLoading(false); // Hide loading indicator
+    provider.setLoading(false);
   }
 }

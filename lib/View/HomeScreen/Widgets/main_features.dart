@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class MainFeaturesHomeScreen extends StatelessWidget {
@@ -15,13 +14,14 @@ class MainFeaturesHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (ctx) => nextPage));
       },
       child: Container(
         height: 140,
-        width: 120,
+        width: screenWidth / 3.5,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(12),

@@ -143,6 +143,7 @@ class UserDatbase {
         SharedPrefFunctions().sharedPrefSignup();
         // Navigate to HomeScreen
         userId = userDoc.id;
+        await SharedPrefFunctions().sharePrefTeamCreated();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -200,6 +201,7 @@ class UserDatbase {
       if (userCredential.user != null) {
         log("Firebase User: ${userCredential.user?.displayName}, ${userCredential.user?.email}");
         // Navigate to HomeScreen
+        await SharedPrefFunctions().sharePrefTeamCreated();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomeScreen()),

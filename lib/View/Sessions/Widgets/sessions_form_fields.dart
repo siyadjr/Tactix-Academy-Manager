@@ -24,12 +24,18 @@ class FormFields extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         buildTextField(
+          maxLines: 1,
           controller: controller.nameController,
           label: 'Session Name',
           hint: 'Enter session name',
           prefixIcon: Icons.sports_outlined,
-          validator: (value) =>
-              value?.isEmpty == true ? 'Please enter a session name' : null,
+          validator: (value) {
+            // Check if value is empty or consists of spaces only and whether trimming should happen
+            if (value?.isEmpty == true || (value!.trim().isEmpty)) {
+              return 'Please enter a Session name';
+            }
+            return null; // No error
+          },
         ),
         const SizedBox(height: 20),
         buildTextField(
@@ -37,21 +43,41 @@ class FormFields extends StatelessWidget {
           label: 'Description',
           hint: 'Enter session description',
           prefixIcon: Icons.description_outlined,
-          maxLines: 3,
-          validator: (value) =>
-              value?.isEmpty == true ? 'Please enter a description' : null,
+          validator: (value) {
+            // Check if value is empty or consists of spaces only and whether trimming should happen
+            if (value?.isEmpty == true || (value!.trim().isEmpty)) {
+              return 'Please enter a description';
+            }
+            return null; // No error
+          },
         ),
         const SizedBox(height: 20),
         buildTextField(
+          maxLines: 1,
           controller: controller.locationController,
           label: 'Location',
           hint: 'Enter session location',
           prefixIcon: Icons.location_on_outlined,
-          validator: (value) =>
-              value?.isEmpty == true ? 'Please enter a location' : null,
+          validator: (value) {
+            // Check if value is empty or consists of spaces only and whether trimming should happen
+            if (value?.isEmpty == true || (value!.trim().isEmpty)) {
+              return 'Please enter a Location ';
+            }
+            return null; // No error
+          },
         ),
         const SizedBox(height: 20),
         _buildTypeDropdown(context, controller),
+        const SizedBox(
+          height: 20,
+        ),
+        const SizedBox(height: 20),
+        _buildDateField(context, controller),
+        const SizedBox(
+          height: 20,
+        ),
+        const SizedBox(height: 20),
+        _buildSaveButton(controller, context)
       ],
     );
   }
@@ -147,6 +173,82 @@ class FormFields extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSaveButton(
+      AddSessionController controller, BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: controller.isSubmitting
+            ? null
+            : () => controller.submitSession(context),
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: controller.isSubmitting
+            ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
+              )
+            : const Text(
+                'Save Session',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+      ),
+    );
+  }
+
+  Widget _buildDateField(
+      BuildContext context, AddSessionController controller) {
+    return GestureDetector(
+      onTap: () async {
+        final pickedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+        );
+        if (pickedDate != null) {
+          controller.selectedDate = pickedDate;
+          controller.notifyListeners();
+        }
+      },
+      child: AbsorbPointer(
+        child: TextFormField(
+          controller: TextEditingController(
+            text: controller.selectedDate != null
+                ? '${controller.selectedDate!.day}/${controller.selectedDate!.month}/${controller.selectedDate!.year}'
+                : '',
+          ),
+          style: const TextStyle(color: secondTextColour),
+          decoration: InputDecoration(
+            labelStyle: const TextStyle(color: Colors.white),
+            labelText: 'Select Date',
+            hintText: 'Pick a date',
+            prefixIcon: const Icon(
+              Icons.calendar_today,
+              color: mainTextColour,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Colors.white),
+            ),
+            filled: true,
+            fillColor: Colors.white.withOpacity(0.1),
+          ),
+        ),
       ),
     );
   }

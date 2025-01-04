@@ -1,4 +1,4 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class buildTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -6,7 +6,7 @@ class buildTextField extends StatelessWidget {
   final String hint;
   final IconData prefixIcon;
   final String? Function(String?)? validator;
-  final int maxLines;
+  final int? maxLines;
 
   const buildTextField({
     required this.controller,
@@ -14,7 +14,7 @@ class buildTextField extends StatelessWidget {
     required this.hint,
     required this.prefixIcon,
     this.validator,
-    this.maxLines = 1,
+    this.maxLines = null,
   });
 
   @override
@@ -35,9 +35,10 @@ class buildTextField extends StatelessWidget {
           ),
         ),
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: controller,
           style: const TextStyle(color: Colors.white),
-          maxLines: maxLines,
+          maxLines: maxLines ?? null,
           validator: validator,
           decoration: InputDecoration(
             hintText: hint,

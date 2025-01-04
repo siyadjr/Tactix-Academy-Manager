@@ -1,12 +1,13 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:tactix_academy_manager/Controller/home_screen_provider.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';
+import 'package:tactix_academy_manager/View/BroadCast/Widgets/broad_cast_no_announcment.dart';
+import 'package:tactix_academy_manager/View/BroadCast/Widgets/broadcast_error_state.dart';
+import 'package:tactix_academy_manager/View/BroadCast/Widgets/broadcast_message_list.dart';
+import 'package:tactix_academy_manager/View/BroadCast/functions/format_time.dart';
 
 class BroadCast extends StatefulWidget {
   const BroadCast({super.key});
@@ -20,18 +21,17 @@ class _BroadCastState extends State<BroadCast>
   late AnimationController _controller;
   late Animation<double> _animation;
   final TextEditingController _messageController = TextEditingController();
-
   String? _teamId;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _initializeAnimation();
-    _fetchTeamId();
+    initializeAnimation();
+    fetchTeamId();
   }
 
-  void _initializeAnimation() {
+  void initializeAnimation() {
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -43,7 +43,7 @@ class _BroadCastState extends State<BroadCast>
     _controller.forward();
   }
 
-  Future<void> _fetchTeamId() async {
+  Future<void> fetchTeamId() async {
     try {
       String fetchedTeamId = await TeamDatabase().getTeamId();
       setState(() {
@@ -66,22 +66,6 @@ class _BroadCastState extends State<BroadCast>
     super.dispose();
   }
 
-  String _formatTimestamp(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
-    DateTime now = DateTime.now();
-    Duration difference = now.difference(dateTime);
-
-    if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays}d ago';
-    } else {
-      return DateFormat('MMM d, y').format(dateTime);
-    }
-  }
-
   void _sendMessage() async {
     String message = _messageController.text.trim();
     if (message.isNotEmpty) {
@@ -99,13 +83,25 @@ class _BroadCastState extends State<BroadCast>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Broadcast',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Team Broadcast',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+            Text(
+              'Announcements & Updates',
+              style: TextStyle(
+                color: Colors.grey[400],
+                fontSize: 14,
+              ),
+            ),
+          ],
         ),
         backgroundColor: Colors.black,
         elevation: 0,
@@ -119,42 +115,112 @@ class _BroadCastState extends State<BroadCast>
           ),
         ),
         child: _isLoading
-            ? const Center(
+            ? Center(
                 child: CircularProgressIndicator(
-                  color: Colors.white,
+                  color: Colors.blue[400],
                 ),
               )
             : FadeTransition(
                 opacity: _animation,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        child: _teamId == null
-                            ? const Center(
-                                child: Text(
-                                  'Error: No team ID found!',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 16,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: _teamId == null
+                          ? const BroadcastErrorState()
+                          : buildMessageStream(),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        border: Border(
+                          top: BorderSide(
+                            color: Colors.blue.withOpacity(0.2),
+                          ),
+                        ),
+                      ),
+                      child: SafeArea(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: FadeInRight(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(25),
+                                    border: Border.all(
+                                      color: Colors.blue.withOpacity(0.3),
+                                    ),
+                                  ),
+                                  child: TextField(
+                                    controller: _messageController,
+                                    style: const TextStyle(color: Colors.white),
+                                    decoration: InputDecoration(
+                                      hintText:
+                                          'Announce something to your team...',
+                                      hintStyle:
+                                          TextStyle(color: Colors.grey[400]),
+                                      border: InputBorder.none,
+                                      contentPadding: const EdgeInsets.all(16),
+                                      prefixIcon: Icon(
+                                        Icons.campaign,
+                                        color: Colors.blue[400],
+                                      ),
+                                    ),
+                                    maxLines: null,
                                   ),
                                 ),
-                              )
-                            : _buildMessageStream(),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            FadeInUp(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.blue[400]!,
+                                      Colors.blue[600]!
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(25),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.blue.withOpacity(0.3),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(25),
+                                    onTap: _sendMessage,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(16),
+                                      child: const Icon(
+                                        Icons.send_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      buildMessageInput(),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
       ),
     );
   }
 
-  Widget _buildMessageStream() {
+  Widget buildMessageStream() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('Teams')
@@ -164,163 +230,36 @@ class _BroadCastState extends State<BroadCast>
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(color: Colors.white),
+          return Center(
+            child: CircularProgressIndicator(color: Colors.blue[400]),
           );
         }
 
         if (snapshot.hasError) {
           return Center(
-            child: Text(
-              'Error fetching messages',
-              style: TextStyle(color: Colors.red.shade300, fontSize: 16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, size: 48, color: Colors.red[300]),
+                const SizedBox(height: 16),
+                Text(
+                  'Unable to load messages',
+                  style: TextStyle(color: Colors.red[300], fontSize: 16),
+                ),
+              ],
             ),
           );
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(
-            child: Text(
-              'No messages yet!',
-              style: TextStyle(color: Colors.grey, fontSize: 16),
-            ),
-          );
+          return const BroadcastNoAnnouncement();
         }
 
-        final messages = snapshot.data!.docs;
-
-        return ListView.builder(
-          reverse: true,
-          itemCount: messages.length,
-          itemBuilder: (context, index) {
-            final message = messages[index].data() as Map<String, dynamic>;
-            final messageText = message['message'] ?? 'No message content';
-            final timestamp = message['timestamp'] != null
-                ? (message['timestamp'] as Timestamp)
-                : null;
-
-            return Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                GestureDetector(
-                  onLongPress: () {},
-                  child: Container(
-                    padding: const EdgeInsets.all(16.0),
-                    margin: const EdgeInsets.only(bottom: 12.0),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.blue.shade700, Colors.blue.shade600],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(12.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          messageText,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          timestamp != null ? _formatTimestamp(timestamp) : '',
-                          style: TextStyle(
-                            color: Colors.blue.shade100,
-                            fontSize: 12.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Consumer<TeamProvider>(builder: (context, teamProvider, child) {
-                  return CircleAvatar(
-                    backgroundImage: teamProvider.managerPhotoUrl.isNotEmpty
-                        ? NetworkImage(teamProvider.managerPhotoUrl)
-                        : const AssetImage('Assets/default_team.logo.png')
-                            as ImageProvider,
-                  );
-                })
-              ]),
-            );
-          },
+        return BroadcastMessageList(
+          snapshot: snapshot,
         );
       },
     );
   }
-
-  Widget buildMessageInput() {
-    return Row(
-      children: [
-        Expanded(
-          child: FadeInRight(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: TextField(
-                controller: _messageController,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Type a message',
-                  hintStyle: TextStyle(
-                    color: Colors.grey.shade400,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12.0),
-        FadeInUp(
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blue.shade400,
-                  Colors.blue.shade600,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            child: IconButton(
-              icon: const Icon(
-                Icons.send_rounded,
-                color: Colors.white,
-              ),
-              onPressed: _sendMessage,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }
+
