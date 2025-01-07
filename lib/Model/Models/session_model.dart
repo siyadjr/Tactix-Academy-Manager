@@ -1,4 +1,5 @@
 class SessionModel {
+  final String id;
   final String name;
   final String description;
   final String sessionType;
@@ -7,7 +8,9 @@ class SessionModel {
   final String location;
 
   SessionModel(
-      {required this.name,
+      {required this.
+      id,
+        required this.name,
       required this.description,
       required this.sessionType,
       required this.date,

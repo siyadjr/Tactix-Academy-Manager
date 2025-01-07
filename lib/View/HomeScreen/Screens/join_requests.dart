@@ -1,98 +1,23 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/join_requests_db.dart';
 import 'package:tactix_academy_manager/Model/Models/player_model.dart';
+import 'package:tactix_academy_manager/View/Players/PlayerInitialDatas/add_player_initial_details.dart';
 
 class JoinRequests extends StatelessWidget {
   const JoinRequests({super.key});
-
-  Future<void> _approveRequest(
-      BuildContext context, String teamId, String userId) async {
-    try {
-      final teamDoc =
-          FirebaseFirestore.instance.collection('Teams').doc(teamId);
-
-      FirebaseFirestore.instance
-          .collection('Players')
-          .doc(userId)
-          .update({'teamId': teamId});
-      FirebaseFirestore.instance.runTransaction((transaction) async {
-        DocumentSnapshot teamSnapshot = await transaction.get(teamDoc);
-
-        if (teamSnapshot.exists) {
-          List<dynamic> requests = teamSnapshot.get('playersRequests') ?? [];
-          log(requests.toString());
-          requests.removeWhere((request) => request['userId'] == userId);
-
-          transaction.update(teamDoc, {'playersRequests': requests});
-        }
-      });
-      await teamDoc.update({
-        'players': FieldValue.arrayUnion([userId]),
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Request approved successfully!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pop(context);
-    } catch (e) {
-      print("Error approving request: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error approving request: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  Future<void> _declineRequest(
-      BuildContext context, String teamId, String userId) async {
-    try {
-      final teamDoc =
-          FirebaseFirestore.instance.collection('Teams').doc(teamId);
-
-      // Remove the user from playersRequests
-      FirebaseFirestore.instance.runTransaction((transaction) async {
-        DocumentSnapshot teamSnapshot = await transaction.get(teamDoc);
-
-        if (teamSnapshot.exists) {
-          List<dynamic> playersRequests =
-              teamSnapshot.get('playersRequests') ?? [];
-
-          playersRequests.remove(userId);
-
-          transaction.update(teamDoc, {'playersRequests': playersRequests});
-        }
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Request declined successfully!'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-    } catch (e) {
-      log("Error declining request: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error declining request: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text('Join Requests'),
+        title: const Text(
+          'Join Requests',
+          style: TextStyle(color: secondTextColour),
+        ),
         centerTitle: true,
       ),
       body: FutureBuilder<List<PlayerModel>>(
@@ -151,13 +76,20 @@ class JoinRequests extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.check, color: Colors.green),
                         onPressed: () {
-                          _approveRequest(context, player.teamId, player.id);
+                          JoinRequestsDb().approveRequest(
+                              context, player.teamId, player.id);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) =>
+                                      AddPlayerInitialDetails(player: player)));
                         },
                       ),
                       IconButton(
                         icon: const Icon(Icons.close, color: Colors.red),
                         onPressed: () {
-                          _declineRequest(context, player.teamId, player.id);
+                          JoinRequestsDb().declineRequest(
+                              context, player.teamId, player.id);
                         },
                       ),
                     ],

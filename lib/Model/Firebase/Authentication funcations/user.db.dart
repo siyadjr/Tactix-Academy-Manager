@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tactix_academy_manager/Controller/Api/cloudinery_class.dart';
-import 'package:tactix_academy_manager/Core/Theme/SharedPrefernce/shared_pref_functions.dart';
+import 'package:tactix_academy_manager/Core/SharedPrefernce/shared_pref_functions.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/important_data.dart';
 
@@ -162,7 +162,7 @@ class UserDatbase {
         showSnackBar(context, "Incorrect password.");
       } else {
         log("Error during sign-in: $e");
-        showSnackBar(context, "An error occurred. Please try again.");
+        showSnackBar(context, "Some issue is there. Please try again.");
       }
     } catch (e) {
       // Catch any other errors

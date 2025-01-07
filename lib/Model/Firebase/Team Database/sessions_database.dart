@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:tactix_academy_manager/Controller/add_session_controller.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
-
-
 
 class SessionsDatabase {
   Future<void> addSessions(SessionModel session) async {
@@ -32,10 +32,13 @@ class SessionsDatabase {
     } catch (e) {
       print('Error adding session: $e');
     }
-  }Future<List<SessionModel>> fetchSessions() async {
+  }
+
+  Future<List<SessionModel>> fetchSessions() async {
     try {
       final teamId = await TeamDatabase().getTeamId();
-      final teamDocRef = FirebaseFirestore.instance.collection('Teams').doc(teamId);
+      final teamDocRef =
+          FirebaseFirestore.instance.collection('Teams').doc(teamId);
 
       // Get the sessions subcollection for the team
       final querySnapshot = await teamDocRef.collection('sessions').get();
@@ -43,6 +46,7 @@ class SessionsDatabase {
       // Convert the fetched documents to SessionModel objects
       return querySnapshot.docs.map((doc) {
         return SessionModel(
+          id: doc.id,
           name: doc['name'],
           description: doc['description'],
           imagePath: doc['imagePath'],
@@ -55,5 +59,16 @@ class SessionsDatabase {
       log('Error fetching sessions: $e');
       return [];
     }
+  }
+
+  Future<void> deleteSession(SessionModel session) async {
+    final teamId = await TeamDatabase().getTeamId();
+
+    // Reference to the specific team's document
+    final teamDocRef =
+        FirebaseFirestore.instance.collection('Teams').doc(teamId);
+    teamDocRef.collection('sessions').doc(session.id).delete();
+    // Navigator.pop(context);
+    AddSessionController().notifyListeners();
   }
 }

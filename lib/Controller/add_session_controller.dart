@@ -1,8 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:tactix_academy_manager/Controller/Api/cloudinery_class.dart';
+import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/sessions_database.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
 import 'package:tactix_academy_manager/View/Sessions/all_sessions.dart';
@@ -35,8 +36,31 @@ class AddSessionController extends ChangeNotifier {
     }
   }
 
+  bool validateDate() {
+    if (selectedDate == null) {
+      return false; // No date selected
+    }
+
+    final now = DateTime.now();
+    if (selectedDate!.isBefore(now)) {
+      return false; // Date is in the past
+    }
+
+    return true;
+  }
+
+  void notifiyListeners() {
+    notifiyListeners();
+  }
+
   Future<void> submitSession(BuildContext context) async {
     if (!formKey.currentState!.validate()) return;
+
+    if (selectedDate == null || !validateDate()) {
+      _showErrorSnackBar(
+          context, 'Please select a valid date (not in the past)');
+      return;
+    }
 
     if (image == null) {
       _showErrorSnackBar(context, 'Please select an image');
@@ -47,17 +71,18 @@ class AddSessionController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future.delayed(
-          const Duration(seconds: 1)); // Simulated network delay
+      await Future.delayed(const Duration(seconds: 1));
 
       final photo = await CloudineryClass().uploadPhoto(image!.path);
       final session = SessionModel(
-          name: nameController.text,
-          description: descriptionController.text,
-          sessionType: type,
-          date: selectedDate.toString(),
-          imagePath: photo.toString(),
-          location: locationController.text);
+        id: '',
+        name: nameController.text,
+        description: descriptionController.text,
+        sessionType: type,
+        date: selectedDate.toString(),
+        imagePath: photo.toString(),
+        location: locationController.text,
+      );
       await SessionsDatabase().addSessions(session);
 
       Navigator.pushReplacement(
@@ -76,8 +101,12 @@ class AddSessionController extends ChangeNotifier {
   void _showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(context).colorScheme.error),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: backGroundColor,
+      ),
     );
   }
 

@@ -8,7 +8,6 @@ import 'package:tactix_academy_manager/Model/Firebase/Authentication%20funcation
 import 'package:tactix_academy_manager/View/Authentications/Onboarding/get_started1.dart';
 import 'package:tactix_academy_manager/View/Authentications/lisence_request.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/home_screen.dart';
-import 'package:tactix_academy_manager/View/Sessions/all_sessions.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -16,9 +15,9 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 4), () {
-      // checkRegister(context);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (ctx) => const GetStarted()));
+      checkRegister(context);
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (ctx) => const GetStarted()));
     });
     return Scaffold(
       backgroundColor: backGroundColor,

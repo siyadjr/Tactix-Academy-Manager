@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 //main colours>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const primaryColor = Colors.white;
 const backGroundColor = Color(0xFF000620);
-
+const iconColour = Colors.blue;
 //text colours>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 const mainTextColour = Color(0xFF6426AC);

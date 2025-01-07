@@ -61,12 +61,10 @@ class PlayerDatabase {
           id: id,
           name: data['name'] ?? 'Unknown', // String
           email: data['email'] ?? 'No email', // String
-          fit: data['fit'] ?? false, // bool
+          fit: data['fit'] ?? 'unfit', // bool
           goals: data['goals'] ?? '0', // int
           assists: data['assists'] ?? '0', // int
-          number: (data['number'] is int)
-              ? data['number']
-              : int.tryParse(data['number'] ?? '0') ?? '0', // int
+          number: (data['number']) ?? '0', // int
           position: data['position'] ?? 'Unknown', // String
           rank: data['rank'] ?? 'Unranked', // String
           teamId: data['teamId'] ?? '', // String
@@ -80,5 +78,16 @@ class PlayerDatabase {
       log('Error fetching player details for ID $id: $e');
       throw e;
     }
+  }
+
+  Future<void> addPlayerDetails(PlayerModel player) async {
+    await FirebaseFirestore.instance
+        .collection('Players')
+        .doc(player.id)
+        .update({
+      'goals': player.goals,
+      'number': player.number,
+      'position': player.position
+    });
   }
 }
