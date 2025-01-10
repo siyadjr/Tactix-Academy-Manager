@@ -2,5 +2,6 @@
 const userLoggedIn = 'user';
 const userRegisterd = 'userRegisterd';
 const userAuthCompleated = 'userAuthCompleated';
-String userId='';
-String userTeamId='';
+String userId = '';
+String userTeamId = '';
+String editedImage = '';

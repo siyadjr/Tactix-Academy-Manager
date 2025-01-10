@@ -1,16 +1,39 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:tactix_academy_manager/Controller/add_session_controller.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
+import 'package:tactix_academy_manager/Model/Models/session_model.dart';
 import 'package:tactix_academy_manager/View/Sessions/Widgets/add_session_custom_textfields.dart';
 
 class FormFields extends StatelessWidget {
   final AddSessionController controller;
+  final bool edit;
+  final SessionModel? session;
 
-  const FormFields({super.key, required this.controller});
+  FormFields({
+    super.key,
+    required this.controller,
+    this.edit = false,
+    this.session,
+  }) {
+    if (session != null) {
+      controller.nameController.text = session!.name;
+      controller.descriptionController.text = session!.description;
+      controller.locationController.text = session!.location;
+      controller.type = session!.sessionType; // Default to 'Training' if null
+      log(session!.date);
+
+      controller.selectedDate = DateTime.parse(session!.date);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    // Initialize the controllers if the session is not null
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,11 +53,10 @@ class FormFields extends StatelessWidget {
           hint: 'Enter session name',
           prefixIcon: Icons.sports_outlined,
           validator: (value) {
-            // Check if value is empty or consists of spaces only and whether trimming should happen
-            if (value?.isEmpty == true || (value!.trim().isEmpty)) {
+            if (value?.isEmpty == true || value!.trim().isEmpty) {
               return 'Please enter a Session name';
             }
-            return null; // No error
+            return null;
           },
         ),
         const SizedBox(height: 20),
@@ -44,11 +66,10 @@ class FormFields extends StatelessWidget {
           hint: 'Enter session description',
           prefixIcon: Icons.description_outlined,
           validator: (value) {
-            // Check if value is empty or consists of spaces only and whether trimming should happen
-            if (value?.isEmpty == true || (value!.trim().isEmpty)) {
+            if (value?.isEmpty == true || value!.trim().isEmpty) {
               return 'Please enter a description';
             }
-            return null; // No error
+            return null;
           },
         ),
         const SizedBox(height: 20),
@@ -59,25 +80,18 @@ class FormFields extends StatelessWidget {
           hint: 'Enter session location',
           prefixIcon: Icons.location_on_outlined,
           validator: (value) {
-            // Check if value is empty or consists of spaces only and whether trimming should happen
-            if (value?.isEmpty == true || (value!.trim().isEmpty)) {
-              return 'Please enter a Location ';
+            if (value?.isEmpty == true || value!.trim().isEmpty) {
+              return 'Please enter a Location';
             }
-            return null; // No error
+            return null;
           },
         ),
         const SizedBox(height: 20),
         _buildTypeDropdown(context, controller),
-        const SizedBox(
-          height: 20,
-        ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 30),
         _buildDateField(context, controller),
-        const SizedBox(
-          height: 20,
-        ),
         const SizedBox(height: 20),
-        _buildSaveButton(controller, context)
+        _buildSaveButton(controller, context, session),
       ],
     );
   }
@@ -177,14 +191,26 @@ class FormFields extends StatelessWidget {
     );
   }
 
-  Widget _buildSaveButton(
-      AddSessionController controller, BuildContext context) {
+  Widget _buildSaveButton(AddSessionController controller, BuildContext context,
+      SessionModel? session) {
     return Container(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: controller.isSubmitting
             ? null
-            : () => controller.submitSession(context),
+            : () {
+                edit == false
+                    ? controller.submitSession(context)
+                    : controller.editSession(
+                        context,
+                        session!,
+                        controller.nameController.text,
+                        controller.locationController.text,
+                        controller.descriptionController.text,
+                        controller.selectedDate!,
+                        controller.type);
+                session = null;
+              },
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(

@@ -5,6 +5,7 @@ import 'package:tactix_academy_manager/Controller/home_screen_provider.dart';
 import 'package:tactix_academy_manager/Controller/license_provider.dart';
 import 'package:tactix_academy_manager/Controller/license_request_controller.dart';
 import 'package:tactix_academy_manager/Controller/team_creation_provider.dart';
+import 'package:tactix_academy_manager/Controller/session_details_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/View/Authentications/splash_screen.dart';
 import 'package:tactix_academy_manager/firebase_options.dart';
@@ -26,7 +27,8 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (_) => TeamProvider()),
         ChangeNotifierProvider(create: (_) => AddSessionController()),
-        ChangeNotifierProvider(create: (_) => LicenseRequestController())
+        ChangeNotifierProvider(create: (_) => LicenseRequestController()),
+        ChangeNotifierProvider(create: (_)=>SessionDetailsProvider())
       ],
       child: const MyApp(),
     ),

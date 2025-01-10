@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_animator/widgets/fading_entrances/fade_in_up.dart';
@@ -6,6 +8,7 @@ import 'package:tactix_academy_manager/Core/ReusableWidgets/custom_dialogue.dart
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/sessions_database.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
+import 'package:tactix_academy_manager/View/Sessions/edit_sessions.dart';
 
 class SessionDetailsActionButtons extends StatelessWidget {
   const SessionDetailsActionButtons({
@@ -86,7 +89,14 @@ class SessionDetailsActionButtons extends StatelessWidget {
                 ),
                 elevation: 0,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (ctx) => EditSessions(
+                              session: session,
+                            )));
+              },
               child: const Icon(
                 Icons.edit,
                 color: iconColour,

@@ -54,11 +54,13 @@ class AllSessions extends StatelessWidget {
                         session: session,
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (ctx) =>
-                                      SessionsDetails(session: session))).then(
-                              (_) => AddSessionController().notifiyListeners());
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) =>
+                                  SessionsDetails(session: session),
+                            ),
+                          ).then(
+                              (_) => addSessionController.notifiyListeners());
                         },
                       );
                     },
@@ -70,12 +72,13 @@ class AllSessions extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (ctx) => const AddSessions()),
-          ).then((_) => AddSessionController().notifiyListeners());
-        },
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (ctx) => const AddSessions()),
+        ).then((_) {
+          // Use the existing provider instance
+          context.read<AddSessionController>().notifyListeners();
+        }),
         label: const Text('New Session'),
         icon: const Icon(Icons.add),
       ),

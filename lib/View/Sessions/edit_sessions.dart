@@ -1,15 +1,19 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/add_session_controller.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/Theme/custom_scaffold.dart';
+import 'package:tactix_academy_manager/Model/Models/session_model.dart';
 import 'package:tactix_academy_manager/View/Sessions/Widgets/add_session_image.dart';
+import 'package:tactix_academy_manager/View/Sessions/Widgets/edit_session_image.dart';
 import 'package:tactix_academy_manager/View/Sessions/Widgets/sessions_form_fields.dart';
 
-class AddSessions extends StatelessWidget {
-  const AddSessions({super.key});
+class EditSessions extends StatelessWidget {
+  final SessionModel session;
+  const EditSessions({super.key, required this.session});
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +22,12 @@ class AddSessions extends StatelessWidget {
       child: Consumer<AddSessionController>(
         builder: (context, controller, _) => CustomScaffold(
           appBar: AppBar(
-            title: const Text('Add Session', style: secondaryTextTheme),
+            title: const Text('Edit Session', style: secondaryTextTheme),
             centerTitle: true,
           ),
           body: Stack(
             children: [
-              _buildForm(controller, context),
-              // _buildSaveButton(controller, context),
+              _buildForm(controller, context, session.imagePath),
             ],
           ),
         ),
@@ -32,7 +35,9 @@ class AddSessions extends StatelessWidget {
     );
   }
 
-  Widget _buildForm(AddSessionController controller, BuildContext context) {
+  Widget _buildForm(
+      AddSessionController controller, BuildContext context, String imagepath) {
+    controller.image = File(imagepath);
     return Form(
       key: controller.formKey,
       child: ListView(
@@ -40,28 +45,27 @@ class AddSessions extends StatelessWidget {
           top: 16,
           left: 16,
           right: 16,
-          bottom: 100, // Extra padding for the save button
+          bottom: 100,
         ),
         children: [
-          ImagePickerField(
-            image: controller.image,
-            onTap: () => _showImagePickerModal(context, controller),
-          ),
+          EditSessionImage(session: session),
           const SizedBox(height: 24),
-          FormFields(controller: controller),
+          FormFields(
+            controller: controller,
+            edit: true,
+            session: session,
+          ),
         ],
       ),
     );
   }
-
-  
 
   void _showImagePickerModal(
       BuildContext context, AddSessionController controller) {
     showModalBottomSheet(
       context: context,
       backgroundColor: backGroundColor,
-      shape: const RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(  
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => SafeArea(
@@ -130,3 +134,4 @@ class AddSessions extends StatelessWidget {
     );
   }
 }
+

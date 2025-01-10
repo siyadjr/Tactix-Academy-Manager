@@ -1,9 +1,13 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/Api/cloudinery_class.dart';
+import 'package:tactix_academy_manager/Controller/session_details_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
+import 'package:tactix_academy_manager/Core/important_data.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/sessions_database.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
 import 'package:tactix_academy_manager/View/Sessions/all_sessions.dart';
@@ -18,6 +22,7 @@ class AddSessionController extends ChangeNotifier {
 
   String type = 'Training';
   File? image;
+
   bool isSubmitting = false;
 
   Future<void> pickImage(ImageSource source) async {
@@ -49,9 +54,12 @@ class AddSessionController extends ChangeNotifier {
     return true;
   }
 
-  void notifiyListeners() {
-    notifiyListeners();
-  }
+// Remove this misspelled method
+notifiyListeners() {  // Remove this
+  notifyListeners();
+}
+
+// Just use notifyListeners() directly where needed
 
   Future<void> submitSession(BuildContext context) async {
     if (!formKey.currentState!.validate()) return;
@@ -85,13 +93,66 @@ class AddSessionController extends ChangeNotifier {
       );
       await SessionsDatabase().addSessions(session);
 
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (ctx) =>
-                  const AllSessions())); // Close the screen after submission
+      context.read<AddSessionController>().notifiyListeners();
+
+      Navigator.pop(context);
     } catch (e) {
       _showErrorSnackBar(context, 'Failed to save session: $e');
+    } finally {
+      isSubmitting = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> editSession(
+    BuildContext context,
+    SessionModel session,
+    String name,
+    String location,
+    String description,
+    DateTime date,
+    String sessionType,
+  ) async {
+    if (!formKey.currentState!.validate()) return;
+
+    if (selectedDate == null || !validateDate()) {
+      _showErrorSnackBar(
+          context, 'Please select a valid date (not in the past)');
+      return;
+    }
+
+    isSubmitting = true;
+    notifyListeners();
+
+    try {
+      // Upload the image only if a new one is provided
+      String? updatedImagePath = session.imagePath;
+      if (editedImage != '') {
+        updatedImagePath = await CloudineryClass().uploadPhoto(editedImage);
+        log(updatedImagePath!);
+      }
+
+      // Update the session with new or existing data
+      final editedSession = SessionModel(
+        id: session.id,
+        name: name,
+        description: description,
+        sessionType: sessionType,
+        date: date.toString(),
+        imagePath: updatedImagePath,
+        location: location,
+      );
+      log(editedSession.toString());
+      await SessionsDatabase().updatedSession(editedSession);
+
+      context.read<AddSessionController>().notifyListeners();
+      await context.read<SessionDetailsProvider>().updateSession(editedSession);
+
+      // Navigate back to the previous screen
+      editedImage = '';
+      Navigator.pop(context);
+    } catch (e) {
+      _showErrorSnackBar(context, 'Failed to update session: $e');
     } finally {
       isSubmitting = false;
       notifyListeners();
@@ -119,5 +180,13 @@ class AddSessionController extends ChangeNotifier {
       Type: $type
       Image: ${image?.path}
     ''';
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    descriptionController.dispose();
+    locationController.dispose();
+    super.dispose();
   }
 }
