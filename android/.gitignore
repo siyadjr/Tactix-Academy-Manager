@@ -19,3 +19,4 @@ lib/firebase_options.dart
 android/app/google-services.json
 lib/Controller/Api/cloudinery_class.dart
 lib/Core
+lib/Controller/Api/gemini_ai.dart

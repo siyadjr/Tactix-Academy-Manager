@@ -2,12 +2,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_animator/flutter_animator.dart';
-import 'package:intl/intl.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';
 import 'package:tactix_academy_manager/View/BroadCast/Widgets/broad_cast_no_announcment.dart';
 import 'package:tactix_academy_manager/View/BroadCast/Widgets/broadcast_error_state.dart';
 import 'package:tactix_academy_manager/View/BroadCast/Widgets/broadcast_message_list.dart';
-import 'package:tactix_academy_manager/View/BroadCast/functions/format_time.dart';
 
 class BroadCast extends StatefulWidget {
   const BroadCast({super.key});
@@ -66,7 +64,7 @@ class _BroadCastState extends State<BroadCast>
     super.dispose();
   }
 
-  void _sendMessage() async {
+  void sendMessage() async {
     String message = _messageController.text.trim();
     if (message.isNotEmpty) {
       log('Sending message: $message');
@@ -197,7 +195,7 @@ class _BroadCastState extends State<BroadCast>
                                   color: Colors.transparent,
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(25),
-                                    onTap: _sendMessage,
+                                    onTap: sendMessage,
                                     child: Container(
                                       padding: const EdgeInsets.all(16),
                                       child: const Icon(
@@ -262,4 +260,3 @@ class _BroadCastState extends State<BroadCast>
     );
   }
 }
-

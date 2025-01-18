@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/Api/cloudinery_class.dart';
-import 'package:tactix_academy_manager/Controller/session_details_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/session_details_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/important_data.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/sessions_database.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
-import 'package:tactix_academy_manager/View/Sessions/all_sessions.dart';
 
 class AddSessionController extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -18,6 +17,7 @@ class AddSessionController extends ChangeNotifier {
   final descriptionController = TextEditingController();
   final locationController = TextEditingController();
   DateTime? selectedDate;
+  DateTime? editedDate;
   final picker = ImagePicker();
 
   String type = 'Training';
@@ -43,7 +43,7 @@ class AddSessionController extends ChangeNotifier {
 
   bool validateDate() {
     if (selectedDate == null) {
-      return false; // No date selected
+      return false;
     }
 
     final now = DateTime.now();
@@ -55,9 +55,10 @@ class AddSessionController extends ChangeNotifier {
   }
 
 // Remove this misspelled method
-notifiyListeners() {  // Remove this
-  notifyListeners();
-}
+  notifiyListeners() {
+    // Remove this
+    notifyListeners();
+  }
 
 // Just use notifyListeners() directly where needed
 
@@ -138,7 +139,7 @@ notifiyListeners() {  // Remove this
         name: name,
         description: description,
         sessionType: sessionType,
-        date: date.toString(),
+        date: editedDate != null ? editedDate.toString() : session.date,
         imagePath: updatedImagePath,
         location: location,
       );

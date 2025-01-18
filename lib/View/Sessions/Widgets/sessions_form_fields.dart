@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:tactix_academy_manager/Controller/add_session_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/add_session_controller.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
 import 'package:tactix_academy_manager/View/Sessions/Widgets/add_session_custom_textfields.dart';
@@ -248,14 +248,15 @@ class FormFields extends StatelessWidget {
         );
         if (pickedDate != null) {
           controller.selectedDate = pickedDate;
+          controller.editedDate = pickedDate;
           controller.notifyListeners();
         }
       },
       child: AbsorbPointer(
         child: TextFormField(
           controller: TextEditingController(
-            text: controller.selectedDate != null
-                ? '${controller.selectedDate!.day}/${controller.selectedDate!.month}/${controller.selectedDate!.year}'
+            text: controller.editedDate != null
+                ? '${controller.editedDate!.day}/${controller.editedDate!.month}/${controller.editedDate!.year}'
                 : '',
           ),
           style: const TextStyle(color: secondTextColour),

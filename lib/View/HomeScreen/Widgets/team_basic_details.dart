@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:tactix_academy_manager/Controller/home_screen_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/home_screen_provider.dart';
 
 class TeamBasicDetails extends StatelessWidget {
   const TeamBasicDetails({super.key});

@@ -6,7 +6,7 @@ import 'package:tactix_academy_manager/View/Sessions/Widgets/sessions_card.dart'
 import 'package:tactix_academy_manager/View/Sessions/add_sessions.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
 import 'package:tactix_academy_manager/View/Sessions/sessions_details.dart';
-import 'package:tactix_academy_manager/Controller/add_session_controller.dart'; // Assuming AddSessionController is defined here.
+import 'package:tactix_academy_manager/Controller/Controllers/add_session_controller.dart'; // Assuming AddSessionController is defined here.
 
 class AllSessions extends StatelessWidget {
   const AllSessions({super.key});

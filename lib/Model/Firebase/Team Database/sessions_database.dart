@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:tactix_academy_manager/Controller/add_session_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/add_session_controller.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';
 import 'package:tactix_academy_manager/Model/Models/session_model.dart';
 

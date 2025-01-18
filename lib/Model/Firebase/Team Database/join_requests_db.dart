@@ -54,6 +54,8 @@ class JoinRequestsDb {
           name: playerData['name'] ?? '',
           email: playerData['email'] ?? '',
           fit: playerData['fit'] ?? '0',
+          matches: playerData['matches'] ?? '0',
+          achivements: playerData['achivements']??[],
           goals: playerData['goals'] ?? '0',
           assists: playerData['assists'] ?? '0',
           number: playerData['number'] ?? '0',
@@ -96,12 +98,6 @@ class JoinRequestsDb {
         'players': FieldValue.arrayUnion([userId]),
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Request approved successfully!'),
-          backgroundColor: Colors.green,
-        ),
-      );
       Navigator.pop(context);
     } catch (e) {
       print("Error approving request: $e");

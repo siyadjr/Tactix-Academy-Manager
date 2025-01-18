@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:tactix_academy_manager/Controller/add_session_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/add_session_controller.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/Theme/custom_scaffold.dart';
 import 'package:tactix_academy_manager/View/Sessions/Widgets/add_session_image.dart';

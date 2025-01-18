@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_animator/widgets/fading_entrances/fade_in_up.dart';
-import 'package:tactix_academy_manager/Controller/add_session_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/add_session_controller.dart';
 import 'package:tactix_academy_manager/Core/ReusableWidgets/custom_dialogue.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/sessions_database.dart';

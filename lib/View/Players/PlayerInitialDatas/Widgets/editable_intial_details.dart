@@ -38,6 +38,7 @@ class EditablePlayerIntialData extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             TextFormField(
+              keyboardType: TextInputType.number,
               controller: controller,
               decoration: InputDecoration(
                 prefixIcon: Icon(icon, color: secondTextColour),

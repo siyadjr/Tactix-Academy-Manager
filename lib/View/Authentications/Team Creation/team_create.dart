@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tactix_academy_manager/Controller/team_creation_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/team_creation_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/Theme/custom_scaffold.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';

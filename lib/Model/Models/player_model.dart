@@ -3,10 +3,12 @@ class PlayerModel {
   final String name;
   final String email;
   final String fit;
+  final String matches;
   final String goals;
   final String assists;
   final String number;
   final String position;
+  List<dynamic> achivements;
   final String rank;
   final String teamId;
   final String userProfile;
@@ -16,6 +18,8 @@ class PlayerModel {
     required this.name,
     required this.email,
     required this.fit,
+    required this.matches,
+    required this.achivements,
     required this.goals,
     required this.assists,
     required this.number,
@@ -28,10 +32,12 @@ class PlayerModel {
   // Factory constructor to convert Firestore document to PlayerModel
   factory PlayerModel.fromMap(Map<String, dynamic> data) {
     return PlayerModel(
-      id: data['id']??'',
+      id: data['id'] ?? '',
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       fit: data['fit'] ?? '',
+      matches: data['matches'] ?? '0',
+      achivements: data['achivements'] ?? [],
       goals: data['goals'] ?? '0',
       assists: data['assists'] ?? '0',
       number: data['number'] ?? 'not assigned',

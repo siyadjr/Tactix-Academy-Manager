@@ -62,6 +62,8 @@ class PlayerDatabase {
           name: data['name'] ?? 'Unknown', // String
           email: data['email'] ?? 'No email', // String
           fit: data['fit'] ?? 'unfit', // bool
+          matches: data['matches'] ?? '0',
+          achivements: data['achivements'] ?? [],
           goals: data['goals'] ?? '0', // int
           assists: data['assists'] ?? '0', // int
           number: (data['number']) ?? '0', // int
@@ -87,7 +89,29 @@ class PlayerDatabase {
         .update({
       'goals': player.goals,
       'number': player.number,
+      'matches': player.matches,
+      'assists': player.assists,
+
+      //  'achivements':player.achivements,
       'position': player.position
     });
+    
+  }
+
+  Future<void> addPlayerAchievement(
+      String playerId, String name, String count) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Players')
+          .doc(playerId)
+          .update({
+        'achivements': FieldValue.arrayUnion([
+          {'name': name, 'count': count}
+        ]),
+      });
+      print("Achievement added successfully!");
+    } catch (e) {
+      print("Error adding achievement: $e");
+    }
   }
 }

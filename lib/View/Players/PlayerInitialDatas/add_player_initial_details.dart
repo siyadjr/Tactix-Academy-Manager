@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/player_details_controller.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/players_database.dart';
 import 'package:tactix_academy_manager/Model/Models/player_model.dart';
@@ -7,8 +9,9 @@ import 'package:tactix_academy_manager/View/Players/Widgets/player_position_drop
 
 class AddPlayerInitialDetails extends StatefulWidget {
   final PlayerModel player;
-
-  const AddPlayerInitialDetails({super.key, required this.player});
+  final bool? pop;
+  const AddPlayerInitialDetails(
+      {super.key, required this.player, this.pop = false});
 
   @override
   State<AddPlayerInitialDetails> createState() =>
@@ -19,12 +22,14 @@ class _AddPlayerInitialDetailsState extends State<AddPlayerInitialDetails> {
   late TextEditingController _goalsController;
   late TextEditingController _assistsController;
   late TextEditingController _jerseyNumber;
+  late TextEditingController _matches;
   String? _selectedPosition;
   bool _changesSaved = false; // Track if changes are saved
 
   @override
   void initState() {
     super.initState();
+    _matches = TextEditingController(text: widget.player.matches);
     _jerseyNumber = TextEditingController(text: widget.player.number);
     _goalsController = TextEditingController(text: widget.player.goals);
     _assistsController = TextEditingController(text: widget.player.assists);
@@ -49,6 +54,8 @@ class _AddPlayerInitialDetailsState extends State<AddPlayerInitialDetails> {
         name: widget.player.name,
         email: widget.player.email,
         fit: widget.player.fit,
+        achivements: widget.player.achivements,
+        matches: _matches.text,
         goals: _goalsController.text,
         assists: _assistsController.text,
         number: _jerseyNumber.text,
@@ -58,16 +65,18 @@ class _AddPlayerInitialDetailsState extends State<AddPlayerInitialDetails> {
         userProfile: widget.player.userProfile);
 
     PlayerDatabase().addPlayerDetails(updatedPlayer);
+    Provider.of<PlayerDetailsController>(context, listen: false)
+        .fetchData(widget.player.id);
     setState(() {
-      _changesSaved = true; // Mark changes as saved
+      _changesSaved = true;
     });
-    Navigator.pop(context, widget.player); // Pass back the updated player
+    Navigator.pop(context, widget.player); 
   }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false, // Prevent navigation unless confirmed
+      canPop: widget.pop ?? false, // Prevent navigation unless confirmed
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -118,6 +127,11 @@ class _AddPlayerInitialDetailsState extends State<AddPlayerInitialDetails> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
+                    EditablePlayerIntialData(
+                      label: 'Matches',
+                      controller: _matches,
+                      icon: Icons.sports_soccer,
+                    ),
                     EditablePlayerIntialData(
                       label: 'Goals',
                       controller: _goalsController,

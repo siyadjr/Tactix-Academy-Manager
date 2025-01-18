@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animator/flutter_animator.dart';
-import 'package:tactix_academy_manager/Controller/home_screen_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/home_screen_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/custom_scaffold.dart';
 import 'package:tactix_academy_manager/View/BroadCast/broad_cast.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/Screens/join_requests.dart';
@@ -93,7 +93,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 50),
-            // Slide in the main features from left
+
             SlideInLeft(
               preferences: const AnimationPreferences(
                 duration: Duration(milliseconds: 1000),
@@ -128,40 +128,34 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             // Bounce in the secondary features
-            BounceInDown(
-              preferences: const AnimationPreferences(
-                duration: Duration(milliseconds: 1200),
-                offset: Duration(milliseconds: 400),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SecondaryFeatureHomeScreen(
-                    color1: Colors.green,
-                    icon: const Icon(
-                      Icons.payment,
-                      color: Colors.white,
-                    ),
-                    text: 'Payments',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SecondaryFeatureHomeScreen(
+                  color1: Colors.green,
+                  icon: const Icon(
+                    Icons.payment,
+                    color: Colors.white,
                   ),
-                  SecondaryFeatureHomeScreen(
-                    color1: Colors.blue,
-                    icon: const Icon(
-                      Icons.bookmark,
-                      color: Colors.white,
-                    ),
-                    text: 'Attendence',
+                  text: 'Payments',
+                ),
+                SecondaryFeatureHomeScreen(
+                  color1: Colors.blue,
+                  icon: const Icon(
+                    Icons.bookmark,
+                    color: Colors.white,
                   ),
-                  SecondaryFeatureHomeScreen(
-                    color1: Colors.purple,
-                    icon: const Icon(
-                      Icons.newspaper,
-                      color: Colors.white,
-                    ),
-                    text: 'News',
-                  )
-                ],
-              ),
+                  text: 'Attendence',
+                ),
+                SecondaryFeatureHomeScreen(
+                  color1: Colors.purple,
+                  icon: const Icon(
+                    Icons.smart_toy,
+                    color: Colors.white,
+                  ),
+                  text: 'Tactix-AI',
+                )
+              ],
             ),
             const SizedBox(height: 20),
             // Fade in the bottom sections
@@ -172,7 +166,7 @@ class HomeScreen extends StatelessWidget {
               ),
               child: const ChatHubContainer(),
             ),
-            FadeInUp(
+            FadeIn(
               preferences: const AnimationPreferences(
                 duration: Duration(milliseconds: 1000),
                 offset: Duration(milliseconds: 800),

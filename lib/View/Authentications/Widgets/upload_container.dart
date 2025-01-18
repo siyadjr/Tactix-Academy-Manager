@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:tactix_academy_manager/Controller/license_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/license_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 
 class UploadContainer extends StatelessWidget {

@@ -27,6 +27,7 @@ class SessionDetailsProvider extends ChangeNotifier {
   }
 
   // Update session data
+  
   Future<void> updateSession(SessionModel updatedSession) async {
     _isLoading = true;
     notifyListeners();
