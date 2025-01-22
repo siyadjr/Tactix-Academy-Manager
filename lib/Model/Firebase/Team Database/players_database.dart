@@ -1,6 +1,10 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/player_details_controller.dart';
+import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';
 import 'package:tactix_academy_manager/Model/Models/player_model.dart';
 
@@ -91,11 +95,10 @@ class PlayerDatabase {
       'number': player.number,
       'matches': player.matches,
       'assists': player.assists,
-
+      'achivements': player.achivements,
       //  'achivements':player.achivements,
       'position': player.position
     });
-    
   }
 
   Future<void> addPlayerAchievement(
@@ -113,5 +116,171 @@ class PlayerDatabase {
     } catch (e) {
       print("Error adding achievement: $e");
     }
+  }
+
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> AlertBox to edit Achievments>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  void showOptionsDialog(BuildContext context, Map<String, dynamic> achievement,
+      PlayerModel player, int index) {
+    // Controllers for text fields
+    final nameController = TextEditingController(text: achievement['name']);
+    final countController =
+        TextEditingController(text: achievement['count'].toString());
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          backgroundColor: backGroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(
+              color: mainTextColour.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: mainTextColour.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.emoji_events,
+                  color: iconColour,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                "Manage Achievement",
+                style: TextStyle(
+                  color: primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Achievement Name",
+                  style: TextStyle(
+                    color: secondTextColour,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: nameController,
+                  style: const TextStyle(color: primaryColor),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: mainTextColour.withOpacity(0.1),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "Enter achievement name",
+                    hintStyle: TextStyle(color: primaryColor.withOpacity(0.5)),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  "Count",
+                  style: TextStyle(
+                    color: secondTextColour,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: countController,
+                  keyboardType: TextInputType.number,
+                  style: const TextStyle(color: primaryColor),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: mainTextColour.withOpacity(0.1),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: "Enter count",
+                    hintStyle: TextStyle(color: primaryColor.withOpacity(0.5)),
+                    prefixIcon: Icon(
+                      Icons.star,
+                      color: iconColour.withOpacity(0.7),
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton.icon(
+              onPressed: () {
+                player.achivements.removeAt(index);
+                PlayerDatabase().addPlayerDetails(player);
+                context.read<PlayerDetailsController>().fetchData(player.id);
+
+                Navigator.pop(context);
+              },
+              icon:
+                  const Icon(Icons.delete_outline, color: Colors.red, size: 20),
+              label: const Text(
+                "Delete",
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+            TextButton.icon(
+              onPressed: () {
+                String name = nameController.text.trim();
+                int count = int.tryParse(countController.text) ?? 0;
+
+                if (name.isEmpty || count < 1) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        name.isEmpty
+                            ? "Achievement name cannot be empty!"
+                            : "Count must be at least 1!",
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return; // Stop execution
+                }
+
+                player.achivements[index] = {
+                  'name': name,
+                  'count': count,
+                };
+                PlayerDatabase().addPlayerDetails(player);
+                context.read<PlayerDetailsController>().fetchData(player.id);
+
+                Navigator.pop(context);
+              },
+              icon:
+                  const Icon(Icons.save_outlined, color: Colors.blue, size: 20),
+              label: const Text(
+                "Save",
+                style: TextStyle(color: Colors.blue),
+              ),
+            ),
+          ],
+          actionsPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        );
+      },
+    );
   }
 }

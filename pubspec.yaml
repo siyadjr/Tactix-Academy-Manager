@@ -54,6 +54,7 @@ dependencies:
   google_generative_ai: ^0.4.6
   flutter_gemini: ^2.0.3
   dash_chat_2: ^0.0.20
+  lottie: ^3.1.3
 
 dev_dependencies:
   flutter_test:
@@ -92,6 +93,11 @@ flutter:
     - Assets/Default avatar.png
     - Assets/Animation - 1736160028902.gif
     - Assets/tactix-bot.jpg
+    - Assets/tactix-bot-avatar.png
+    - Assets/tactix-bot-animation.gif
+    - Assets/Animation - 1736160028902.gif
+    - Assets/Lottie loader animation.json
+    - Assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

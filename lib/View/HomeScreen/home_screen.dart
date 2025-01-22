@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_animator/flutter_animator.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/home_screen_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/custom_scaffold.dart';
+import 'package:tactix_academy_manager/View/Attendence/Screens/attendence.dart';
 import 'package:tactix_academy_manager/View/BroadCast/broad_cast.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/Screens/join_requests.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/Widgets/chat_hub_container.dart';
@@ -10,6 +11,7 @@ import 'package:tactix_academy_manager/View/HomeScreen/Widgets/main_features.dar
 import 'package:tactix_academy_manager/View/HomeScreen/Widgets/secondary_features.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/Widgets/team_basic_details.dart';
 import 'package:tactix_academy_manager/View/Sessions/all_sessions.dart';
+import 'package:tactix_academy_manager/View/Tactix-AI/tactix_ai_screen.dart';
 
 import '../Players/all_players.dart';
 // ... rest of your imports
@@ -132,6 +134,7 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SecondaryFeatureHomeScreen(
+                  nextPage: Attendance(),
                   color1: Colors.green,
                   icon: const Icon(
                     Icons.payment,
@@ -140,6 +143,7 @@ class HomeScreen extends StatelessWidget {
                   text: 'Payments',
                 ),
                 SecondaryFeatureHomeScreen(
+                  nextPage: Attendance(),
                   color1: Colors.blue,
                   icon: const Icon(
                     Icons.bookmark,
@@ -148,7 +152,9 @@ class HomeScreen extends StatelessWidget {
                   text: 'Attendence',
                 ),
                 SecondaryFeatureHomeScreen(
+                  nextPage: TactixAiScreen(),
                   color1: Colors.purple,
+                  image: 'Assets/tactix-bot-animation.gif',
                   icon: const Icon(
                     Icons.smart_toy,
                     color: Colors.white,

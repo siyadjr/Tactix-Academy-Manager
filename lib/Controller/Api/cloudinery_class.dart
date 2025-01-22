@@ -1,10 +1,8 @@
-import 'package:cloudinary/cloudinary.dart';
-import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer';
 import 'package:cloudinary/cloudinary.dart'
-    as cloudinary_sdk; // For Cloudinary SDK functions
+    as cloudinary_sdk; 
 
 class CloudineryClass {
   final _cloudinary = cloudinary_sdk.Cloudinary.signedConfig(
@@ -78,5 +76,4 @@ Future<String?> uploadTeamPhoto(String imagePath) async {
     return null;
   }
 }
-
 }

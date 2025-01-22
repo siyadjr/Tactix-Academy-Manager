@@ -3,12 +3,15 @@ import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/Api/gemini_ai.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/add_session_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/attendence_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/home_screen_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/license_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/license_request_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/player_attendance_details_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/player_details_controller.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/team_creation_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/session_details_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/todays_attendance_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/View/Authentications/splash_screen.dart';
 import 'package:tactix_academy_manager/firebase_options.dart';
@@ -33,7 +36,10 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AddSessionController()),
         ChangeNotifierProvider(create: (_) => LicenseRequestController()),
         ChangeNotifierProvider(create: (_) => SessionDetailsProvider()),
-        ChangeNotifierProvider(create: (_) => PlayerDetailsController())
+        ChangeNotifierProvider(create: (_) => PlayerDetailsController()),
+        ChangeNotifierProvider(create: (_) => AttendanceProvider()),
+        ChangeNotifierProvider(create: (_) => TodaysAttendanceProvider()),
+        ChangeNotifierProvider(create: (_) => PlayerAttendanceDetailsProvider()),
       ],
       child: const MyApp(),
     ),

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class CustomScaffold extends StatelessWidget {
   final Widget body;
   final PreferredSizeWidget? appBar;
-  const CustomScaffold({super.key, required this.body,this.appBar});
+  final void Function(BuildContext)? button; // Fixed this line
+
+  CustomScaffold({super.key, required this.body, this.appBar, this.button});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,12 @@ class CustomScaffold extends StatelessWidget {
           body,
         ],
       ),
+      floatingActionButton: button != null
+          ? FloatingActionButton(
+              onPressed: () => button!(context), // Add a null check
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 }
