@@ -3,10 +3,15 @@ import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/Api/gemini_ai.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/add_session_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/attendance_overall_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/attendence_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/chat_hub_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/home_screen_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/license_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/license_request_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/payment_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/payment_specific_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/payments_details_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/player_attendance_details_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/player_details_controller.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/team_creation_provider.dart';
@@ -39,7 +44,14 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PlayerDetailsController()),
         ChangeNotifierProvider(create: (_) => AttendanceProvider()),
         ChangeNotifierProvider(create: (_) => TodaysAttendanceProvider()),
-        ChangeNotifierProvider(create: (_) => PlayerAttendanceDetailsProvider()),
+        ChangeNotifierProvider(
+            create: (_) => PlayerAttendanceDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => AttendanceOverallProvider()),
+        ChangeNotifierProvider(create: (_) => ChatHubProvider()),
+        ChangeNotifierProvider(create: (_) => PaymentProvider()),
+        ChangeNotifierProvider(create: (_) => PaymentsDetailsProvider()),
+        ChangeNotifierProvider(create: (_) => PaymentSpecificController()),
+        ChangeNotifierProvider(create: (_) => PaymentSpecificController()),
       ],
       child: const MyApp(),
     ),

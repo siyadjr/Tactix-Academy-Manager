@@ -45,7 +45,7 @@ class Attendance extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            AllAttendanceList(),
+            const AllAttendanceList(),
           ],
         ),
       ),

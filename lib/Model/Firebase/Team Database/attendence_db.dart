@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';
-import 'package:intl/intl.dart'; // Import this for date formatting
+import 'package:tactix_academy_manager/Model/Models/attendance_model.dart'; // Import this for date formatting
 
 class AttendanceDb {
   Future<bool> addAttendance(String date, String time) async {
@@ -67,14 +67,44 @@ class AttendanceDb {
       return [];
     }
   }
-   Future<Map<String, dynamic>> getTodaysAttendance() async {
+
+  Future<List<AttendanceModel>> getAttendanceAsModel() async {
+    final teamId = await TeamDatabase().getTeamId();
+    List<AttendanceModel> attendances = [];
+    if (teamId != null) {
+      try {
+        final snapshot = await FirebaseFirestore.instance
+            .collection('Teams')
+            .doc(teamId)
+            .collection('Attendance')
+            .get();
+
+        for (var doc in snapshot.docs) {
+          final attendance = AttendanceModel(
+              id: doc.id,
+              date: doc['date'],
+              time: doc['time'],
+              attendedPlayers: doc['attendedPlayers']);
+          attendances.add(attendance);
+        }
+
+        return attendances;
+      } catch (e) {
+        log("Error fetching attendance: $e");
+        return [];
+      }
+    } else {
+      log("Team ID is not available.");
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> getTodaysAttendance() async {
     final teamId = await TeamDatabase().getTeamId();
     final date = DateTime.now();
     final selectedDate = "${date.day}/${date.month}/${date.year}";
-
     String formattedDate = selectedDate.replaceAll('/', '');
     log(formattedDate);
-
     if (teamId != null) {
       try {
         final snapshot = await FirebaseFirestore.instance
@@ -99,5 +129,15 @@ class AttendanceDb {
       log("Team ID is not available.");
       return <String, dynamic>{};
     }
+  }
+
+  Future<void> deleteAttendance(String id) async {
+    final teamId = await TeamDatabase().getTeamId();
+    FirebaseFirestore.instance
+        .collection('Teams')
+        .doc(teamId)
+        .collection('Attendance')
+        .doc(id)
+        .delete();
   }
 }

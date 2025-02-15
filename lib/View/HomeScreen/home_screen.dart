@@ -10,6 +10,7 @@ import 'package:tactix_academy_manager/View/HomeScreen/Widgets/chat_hub_containe
 import 'package:tactix_academy_manager/View/HomeScreen/Widgets/main_features.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/Widgets/secondary_features.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/Widgets/team_basic_details.dart';
+import 'package:tactix_academy_manager/View/Payments/payments.dart';
 import 'package:tactix_academy_manager/View/Sessions/all_sessions.dart';
 import 'package:tactix_academy_manager/View/Tactix-AI/tactix_ai_screen.dart';
 
@@ -67,13 +68,6 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.format_list_numbered_sharp,
-                            color: Colors.green,
-                          ),
-                        ),
                         IconButton(
                           onPressed: () {
                             Navigator.push(
@@ -134,7 +128,7 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SecondaryFeatureHomeScreen(
-                  nextPage: Attendance(),
+                  nextPage: const Payments(),
                   color1: Colors.green,
                   icon: const Icon(
                     Icons.payment,
@@ -143,7 +137,7 @@ class HomeScreen extends StatelessWidget {
                   text: 'Payments',
                 ),
                 SecondaryFeatureHomeScreen(
-                  nextPage: Attendance(),
+                  nextPage: const Attendance(),
                   color1: Colors.blue,
                   icon: const Icon(
                     Icons.bookmark,
@@ -152,7 +146,7 @@ class HomeScreen extends StatelessWidget {
                   text: 'Attendence',
                 ),
                 SecondaryFeatureHomeScreen(
-                  nextPage: TactixAiScreen(),
+                  nextPage: const TactixAiScreen(),
                   color1: Colors.purple,
                   image: 'Assets/tactix-bot-animation.gif',
                   icon: const Icon(
@@ -164,7 +158,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            // Fade in the bottom sections
+
             FadeInUp(
               preferences: const AnimationPreferences(
                 duration: Duration(milliseconds: 1000),

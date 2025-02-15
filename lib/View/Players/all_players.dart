@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tactix_academy_manager/Core/ReusableWidgets/loading_indicator.dart';
 import 'package:tactix_academy_manager/Core/Theme/custom_scaffold.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team Database/players_database.dart';
 import 'package:tactix_academy_manager/Model/Models/player_model.dart';
@@ -23,7 +24,7 @@ class AllPlayers extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(color: mainTextColour),
+              child: LoadingIndicator(),
             );
           } else if (snapshot.hasError) {
             return Center(

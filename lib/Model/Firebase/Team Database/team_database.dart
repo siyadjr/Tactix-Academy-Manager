@@ -133,4 +133,72 @@ class TeamDatabase {
       rethrow;
     }
   }
+
+  Future<bool> getRentPaymentEnabled() async {
+    try {
+      final teamId = await getTeamId();
+      final snapShot = await FirebaseFirestore.instance
+          .collection('Teams')
+          .doc(teamId)
+          .get();
+
+      // Check if the document exists and rentEnabled field is present
+      if (snapShot.exists && snapShot.data() != null) {
+        final rentEnabled = snapShot.data()?['rentEnabled'] ??
+            false; // Default to false if not found
+        return rentEnabled;
+      }
+      return false; // Return false if the document doesn't exist or rentEnabled is not set
+    } catch (e) {
+      // Handle any errors, such as network or Firebase issues
+      print('Error fetching rent payment status: $e');
+      return false;
+    }
+  }
+
+  Future<void> enablePayment() async {
+    final teamId = await getTeamId();
+    await FirebaseFirestore.instance
+        .collection('Teams')
+        .doc(teamId)
+        .update({'rentEnabled': true});
+  }
+
+  Future<void> disablePayment() async {
+    final teamId = await getTeamId();
+    await FirebaseFirestore.instance
+        .collection('Teams')
+        .doc(teamId)
+        .update({'rentEnabled': false});
+  }
+
+  Future<void> updateRentFee(String fee) async {
+    final teamId = await getTeamId();
+    await FirebaseFirestore.instance
+        .collection('Teams')
+        .doc(teamId)
+        .update({'rentFee': fee});
+  }
+
+  Future<String> getPaymentFee() async {
+    try {
+      final teamId = await getTeamId();
+      final snapShot = await FirebaseFirestore.instance
+          .collection('Teams')
+          .doc(teamId)
+          .get();
+
+      if (snapShot.exists && snapShot.data()!.containsKey('rentFee')) {
+        final rentFee = snapShot.get('rentFee').toString(); // Convert to String
+        log('Fetched rentFee: $rentFee');
+        return rentFee;
+      } else {
+        log('rentFee not found for teamId: $teamId');
+      }
+    } catch (e) {
+      log('Error fetching rentFee: $e');
+    }
+
+    return '0'; // Return default value
+  }
 }

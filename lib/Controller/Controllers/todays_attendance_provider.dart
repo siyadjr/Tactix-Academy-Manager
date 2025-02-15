@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/attendence_db.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/players_database.dart';
+import 'package:tactix_academy_manager/Model/Models/attendance_model.dart';
 import 'package:tactix_academy_manager/Model/Models/player_model.dart';
 
 class TodaysAttendanceProvider extends ChangeNotifier {
   Map<String, dynamic> _todaysAttendance = {};
   Map<String, dynamic> get todaysAttendance => _todaysAttendance;
+  
   List<PlayerModel> _allPlayers = [];
   List<PlayerModel> get allPlayers => _allPlayers;
   List<PlayerModel> _todayAttendedPlayers = [];
@@ -43,10 +45,10 @@ class TodaysAttendanceProvider extends ChangeNotifier {
   notifyListeners();
 
   try {
-    // Fetch all players
+ 
     _allPlayers = await PlayerDatabase().getAllPlayers();
 
-    // Fetch attended players
+   
     _todayAttendedPlayers =
         _allPlayers.where((player) => _attendedPlayers.contains(player.id)).toList();
 

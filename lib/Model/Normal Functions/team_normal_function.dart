@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:tactix_academy_manager/Controller/Api/cloudinery_class.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Authentication%20funcations/user.db.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';
@@ -8,7 +10,7 @@ import 'package:tactix_academy_manager/Model/Models/team_model.dart';
 Future<void> teamCreationFunction(
     String teamName, String teamLocation, String teamPhoto) async {
   try {
-    final managerId = await UserDatbase().getUserDocId();
+    final managerId =  FirebaseAuth.instance.currentUser?.uid;
 
     if (managerId == null) {
       log("Manager ID not found.");
@@ -36,14 +38,13 @@ Future<void> teamCreationFunction(
     log("Error creating team: $e");
   }
 }
- Future<String?> fetchTeamId() async {
-    try {
-      String fetchedTeamId = await TeamDatabase().getTeamId();
-    
-    
-      return fetchedTeamId;
-    } catch (e) {
-      log('Error fetching team ID: $e');
-   
-    }
+
+Future<String?> fetchTeamId() async {
+  try {
+    String fetchedTeamId = await TeamDatabase().getTeamId();
+
+    return fetchedTeamId;
+  } catch (e) {
+    log('Error fetching team ID: $e');
   }
+}

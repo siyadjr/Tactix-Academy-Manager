@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/todays_attendance_provider.dart';
 import 'package:tactix_academy_manager/Core/ReusableWidgets/loading_indicator.dart';
-import 'package:tactix_academy_manager/Model/Models/player_model.dart';
-import 'package:tactix_academy_manager/View/Attendence/Screens/player_attendance_details.dart';
 import 'package:tactix_academy_manager/View/Attendence/Widgets/attendance_statistics_card.dart';
 import 'package:tactix_academy_manager/View/Attendence/Widgets/attendance_statistics_widgets.dart';
 import '../../../Core/Theme/app_colours.dart';
@@ -47,8 +45,11 @@ class AttendanceStatistics extends StatelessWidget {
                 ? const LoadingIndicator()
                 : Column(
                     children: [
-                      buildSectionTitle('Today\'s Attendance', Icons.today, size),
-                      buildTodayAttendanceRow(provider, size, isPortrait),
+                      buildSectionTitle(
+                          'Today\'s Attendance', Icons.today, size),
+                      provider.todaysAttendance.isNotEmpty
+                          ? buildTodayAttendanceRow(provider, size, isPortrait)
+                          : const Text('No attendance recorded for today!'),
                       SizedBox(height: size.height * 0.02),
                       buildSectionTitle(
                           'All Players Analysis', Icons.people, size),
@@ -100,18 +101,26 @@ class AttendanceStatistics extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: AttendanceStatsticsCard(title: 'Attended Players', icon: Icons.check_circle, iconColor: Colors.green.withOpacity(0.7), players: provider.todayAttendedPlayers, size: size, isPortrait: isPortrait),
+            child: AttendanceStatsticsCard(
+                title: 'Attended Players',
+                icon: Icons.check_circle,
+                iconColor: Colors.green.withOpacity(0.7),
+                players: provider.todayAttendedPlayers,
+                size: size,
+                isPortrait: isPortrait),
           ),
           SizedBox(width: size.width * 0.04),
           Expanded(
-            child: AttendanceStatsticsCard(title: 'Absent Players', icon: Icons.cancel, iconColor: Colors.red.withOpacity(0.7), players: provider.todaysAbsentPlayers, size: size, isPortrait: isPortrait),
+            child: AttendanceStatsticsCard(
+                title: 'Absent Players',
+                icon: Icons.cancel,
+                iconColor: Colors.red.withOpacity(0.7),
+                players: provider.todaysAbsentPlayers,
+                size: size,
+                isPortrait: isPortrait),
           ),
         ],
       ),
     );
   }
-
-  
 }
-
-

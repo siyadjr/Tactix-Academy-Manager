@@ -90,12 +90,18 @@ class AttendanceTrackerContainer extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      provider.attendedPlayers.isNotEmpty
-                          ? Text(
-                              'Attended players today: ${provider.attendedPlayers.length}',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 16),
-                            )
+                      provider.todaysAttendance.isNotEmpty
+                          ? provider.attendedPlayers.isNotEmpty
+                              ? Text(
+                                  'Attended players today: ${provider.attendedPlayers.length}',
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                )
+                              : const Text(
+                                  'No one attended today!',
+                                  style: TextStyle(
+                                      color: Colors.redAccent, fontSize: 16),
+                                )
                           : const Text(
                               'No attendance recorded for today!',
                               style: TextStyle(
@@ -108,7 +114,8 @@ class AttendanceTrackerContainer extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (ctx) => const AttendanceStatistics()));
+                                    builder: (ctx) =>
+                                        const AttendanceStatistics()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,

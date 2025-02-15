@@ -84,7 +84,7 @@ class SignIn extends StatelessWidget {
                   const SizedBox(height: 10.0),
                   IconButton(
                     onPressed: () {
-                      UserDatbase().signWithGoogle(context);
+                      UserDatbase().signupWithGoogle(context);
                     },
                     icon: Brand(Brands.google),
                     iconSize: 40.0,

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/attendence_provider.dart';
+import 'package:tactix_academy_manager/Core/ReusableWidgets/loading_indicator.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
+import 'package:tactix_academy_manager/View/Attendence/Screens/attendance_details.dart';
 
 class AllAttendanceList extends StatelessWidget {
   const AllAttendanceList({
@@ -14,14 +16,18 @@ class AllAttendanceList extends StatelessWidget {
     return Expanded(
       child: Consumer<AttendanceProvider>(
         builder: (context, provider, child) {
-          if (provider.attendanceList.isEmpty) {
+          if (provider.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (provider.attendances.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.event_busy,
-                          size: 64,
-                          color: mainTextColour.withOpacity(0.5))
+                          size: 64, color: mainTextColour.withOpacity(0.5))
                       .animate()
                       .scale(duration: 400.ms),
                   const SizedBox(height: 16),
@@ -37,9 +43,9 @@ class AllAttendanceList extends StatelessWidget {
             );
           }
           return ListView.builder(
-            itemCount: provider.attendanceList.length,
+            itemCount: provider.attendances.length,
             itemBuilder: (context, index) {
-              final attendance = provider.attendanceList[index];
+              final attendance = provider.attendances[index];
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 elevation: 8,
@@ -52,6 +58,14 @@ class AllAttendanceList extends StatelessWidget {
                   ),
                 ),
                 child: ListTile(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => AttendanceDetails(
+                                  attendance: attendance,
+                                )));
+                  },
                   contentPadding: const EdgeInsets.all(16),
                   leading: Container(
                     padding: const EdgeInsets.all(12),
@@ -66,7 +80,7 @@ class AllAttendanceList extends StatelessWidget {
                     ),
                   ),
                   title: Text(
-                    'Date: ${attendance['date']}',
+                    'Date: ${attendance.date}',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -86,7 +100,7 @@ class AllAttendanceList extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            'Time: ${attendance['time']}',
+                            'Time: ${attendance.time}',
                             style: TextStyle(
                               fontSize: 14,
                               color: secondTextColour.withOpacity(0.7),

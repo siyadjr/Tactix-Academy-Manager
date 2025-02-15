@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/player_details_controller.dart';
+import 'package:tactix_academy_manager/Core/ReusableWidgets/loading_indicator.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/players_database.dart';
 import 'package:tactix_academy_manager/Model/Models/player_model.dart';
@@ -32,7 +33,7 @@ class PlayerDetailsPage extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(color: primaryColor),
+                child: LoadingIndicator(),
               );
             } else if (snapshot.hasError) {
               return const Center(
@@ -128,7 +129,6 @@ class PlayerDetailsPage extends StatelessWidget {
                     children: [
                       buildInfoChip(Icons.sports_soccer, player.position),
                       const SizedBox(width: 8),
-                      buildInfoChip(Icons.star, 'Rank ${player.rank}'),
                     ],
                   ),
                 ],

@@ -7,7 +7,7 @@ const iconColour = Colors.blue;
 //text colours>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 const mainTextColour = Color(0xFF6426AC);
-const mainTextColour2 = Color.fromARGB(255, 147, 30, 30);
+const mainTextColour2 = Color.fromARGB(255, 231, 10, 10);
 
 const secondTextColour = Colors.white;
 const blackColor = Colors.black;
