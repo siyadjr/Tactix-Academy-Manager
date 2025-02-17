@@ -7,7 +7,7 @@ class PaymentAmountField extends StatelessWidget {
 
   const PaymentAmountField({
     super.key,
-    required this.paymentProvider,
+    required this.paymentProvider, required Null Function(dynamic value) onChanged,
   });
 
   @override

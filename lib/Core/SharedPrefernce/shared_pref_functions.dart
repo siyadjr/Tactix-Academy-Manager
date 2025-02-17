@@ -18,4 +18,16 @@ class SharedPrefFunctions {
     final sharedpref = await SharedPreferences.getInstance();
     await sharedpref.setBool(userLoggedIn, true);
   }
+
+  logout() async {
+    final sharedpref = await SharedPreferences.getInstance();
+    await sharedpref.setBool(userLoggedIn, false);
+  }
+
+  deleteAccount() async {
+    final sharedpref = await SharedPreferences.getInstance();
+    await sharedpref.setBool(userLoggedIn, false);
+    await sharedpref.setBool(userRegisterd, false);
+    await sharedpref.setBool(userAuthCompleated, false);
+  }
 }

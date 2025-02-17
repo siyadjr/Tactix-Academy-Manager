@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tactix_academy_manager/Core/SharedPrefernce/shared_pref_functions.dart';
 import 'package:tactix_academy_manager/Model/Firebase/Authentication%20funcations/user.db.dart';
+import 'package:tactix_academy_manager/Model/Models/team_full_model.dart';
 import 'package:tactix_academy_manager/Model/Models/team_model.dart';
 
 class TeamDatabase {
@@ -19,6 +20,7 @@ class TeamDatabase {
         'teamLocation': team.location,
         'playersRequests': [],
         'teamPhoto': team.teamPhoto,
+        'rentFee': '1'
       });
 
       // Update the teamId dynamically
@@ -200,5 +202,52 @@ class TeamDatabase {
     }
 
     return '0'; // Return default value
+  }
+
+  Future<TeamFullModel?> getTeamDetails() async {
+    final teamId = await getTeamId();
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (teamId.isNotEmpty && userId != null) {
+      final snapShot = await FirebaseFirestore.instance
+          .collection('Teams')
+          .doc(teamId)
+          .get();
+      if (snapShot.exists) {
+        final playersData = snapShot.data()?['players'];
+        final teamData = TeamFullModel(
+          id: snapShot.id,
+          teamName: snapShot.data()?['teamName'],
+          teamLocation: snapShot.data()?['teamLocation'],
+          teamPhoto: snapShot.data()?['teamPhoto'],
+          teamPlayersCount: (playersData is List) ? playersData.length : 0,
+        );
+        return teamData;
+      }
+    }
+    return null;
+  }
+
+  Future<void> updateTeamLogo(String url) async {
+    final teamId = await getTeamId();
+    await FirebaseFirestore.instance
+        .collection('Teams')
+        .doc(teamId)
+        .update({'teamPhoto': url});
+  }
+
+  Future<void> updateTeamLocation(String newLocation) async {
+    final teamId = await getTeamId();
+    await FirebaseFirestore.instance
+        .collection('Teams')
+        .doc(teamId)
+        .update({'teamLocation': newLocation});
+  }
+
+  Future<void> updateTeamName(String newName) async {
+    final teamId = await getTeamId();
+    await FirebaseFirestore.instance
+        .collection('Teams')
+        .doc(teamId)
+        .update({'teamName': newName});
   }
 }

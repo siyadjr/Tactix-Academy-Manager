@@ -13,11 +13,11 @@ class TeamProvider with ChangeNotifier {
   String get teamPhotoUrl => _teamPhotoUrl;
   String get managerPhotoUrl => _managerPhotoUrl;
   String get teamId => _teamId;
-  // Function to fetch team name, team photo, and manager photo
+
   Future<void> fetchTeamNameAndPhoto() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
-
+      log('functioncalled !');
       if (user == null) {
         _teamName = "No User Logged In";
         _teamPhotoUrl = "";

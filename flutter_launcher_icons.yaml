@@ -1,0 +1,23 @@
+flutter_launcher_icons:
+  image_path: "Assets/tactic_app_logo.jpg" # Avoid spaces in filenames
+
+  android: "launcher_icon"
+  min_sdk_android: 21
+
+  ios: true
+  remove_alpha_channel_ios: true
+
+  web:
+    generate: true
+    image_path: "assets/web_icon.png" # Valid path to web icon
+    background_color: "#FFFFFF" # Actual color
+    theme_color: "#000000" # Actual color
+
+  windows:
+    generate: true
+    image_path: "assets/windows_icon.png" # Valid path to Windows icon
+    icon_size: 48
+
+  macos:
+    generate: true
+    image_path: "assets/macos_icon.png" # Valid path to macOS icon

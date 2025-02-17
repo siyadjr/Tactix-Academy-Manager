@@ -34,11 +34,15 @@ class SplashScreen extends StatelessWidget {
     final sharedpref = await SharedPreferences.getInstance();
     final register = sharedpref.getBool(userRegisterd);
     final teamCreated = sharedpref.getBool(userAuthCompleated);
-   
+    final logined = sharedpref.getBool(userLoggedIn);
+
     if (register == true) {
       if (teamCreated != true) {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (ctx) => const CoachingLicenseScreen()));
+      } else if (logined == false) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (ctx) => const GetStarted()));
       } else {
         UserDatbase().fetchUserData();
 

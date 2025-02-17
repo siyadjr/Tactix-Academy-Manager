@@ -16,7 +16,9 @@ import 'package:tactix_academy_manager/Controller/Controllers/player_attendance_
 import 'package:tactix_academy_manager/Controller/Controllers/player_details_controller.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/team_creation_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/session_details_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/team_profile_controller.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/todays_attendance_provider.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/user_profile_controller.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/View/Authentications/splash_screen.dart';
 import 'package:tactix_academy_manager/firebase_options.dart';
@@ -52,6 +54,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PaymentsDetailsProvider()),
         ChangeNotifierProvider(create: (_) => PaymentSpecificController()),
         ChangeNotifierProvider(create: (_) => PaymentSpecificController()),
+        ChangeNotifierProvider(create: (_) => UserProfileController()),
+        ChangeNotifierProvider(create: (_) => TeamProfileController()),
       ],
       child: const MyApp(),
     ),

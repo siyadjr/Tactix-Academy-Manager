@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +9,8 @@ import 'package:tactix_academy_manager/Controller/Api/cloudinery_class.dart';
 import 'package:tactix_academy_manager/Core/SharedPrefernce/shared_pref_functions.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/Core/important_data.dart';
+import 'package:tactix_academy_manager/Model/Firebase/Team%20Database/team_database.dart';
+import 'package:tactix_academy_manager/Model/Models/manager_model.dart';
 import 'package:tactix_academy_manager/View/Authentications/lisence_request.dart';
 import 'package:tactix_academy_manager/View/HomeScreen/home_screen.dart';
 
@@ -72,7 +75,7 @@ class UserDatbase {
 
   Future<void> signupWithGoogle(BuildContext context) async {
     try {
-       await GoogleSignIn().signOut();
+      await GoogleSignIn().signOut();
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         showSnackBar(context, 'Google sign-in cancelled', Colors.orange);
@@ -101,6 +104,9 @@ class UserDatbase {
 
       if (managerDoc.docs.isNotEmpty) {
         userId = managerDoc.docs.first.id;
+        SharedPrefFunctions().sharePrefLogged();
+        
+
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (ctx) => const HomeScreen()));
         return;
@@ -302,6 +308,70 @@ class UserDatbase {
         duration: const Duration(seconds: 3),
       ),
     );
+  }
+
+  Future<ManagerModel?> getUser() async {
+    final teamId = await TeamDatabase().getTeamId();
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (teamId.isNotEmpty && userId != null) {
+      final snapShot = await FirebaseFirestore.instance
+          .collection('Managers')
+          .doc(userId)
+          .get();
+      if (snapShot.exists) {
+        final data = snapShot.data();
+        if (data != null) {
+          return ManagerModel.fromFirestore(data, userId);
+        }
+      }
+    }
+    return null; // Return null if no data is found
+  }
+
+  Future<void> deleteAccount() async {
+    final teamId = await TeamDatabase().getTeamId();
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (teamId.isNotEmpty && userId != null) {
+      // Delete the team document
+      await FirebaseFirestore.instance.collection('Teams').doc(teamId).delete();
+
+      // Delete the manager document
+      await FirebaseFirestore.instance
+          .collection('Managers')
+          .doc(userId)
+          .delete();
+
+      // Fetch and delete all player documents associated with the teamId
+      final playersSnapshot = await FirebaseFirestore.instance
+          .collection('Players')
+          .where('teamId', isEqualTo: teamId)
+          .get();
+
+      for (var doc in playersSnapshot.docs) {
+        await doc.reference.delete();
+      }
+    }
+  }
+
+  Future<void> updateUserName(String newName) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      await FirebaseFirestore.instance
+          .collection('Managers')
+          .doc(userId)
+          .update({'name': newName});
+    }
+  }
+
+  Future<void> uplaodUserProfile(String newImage) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      await FirebaseFirestore.instance
+          .collection('Managers')
+          .doc(userId)
+          .update({'userProfile': newImage});
+    }
   }
 
   static const _defaultAvatarUrl =

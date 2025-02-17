@@ -42,29 +42,34 @@ class HomeScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Manage Your",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white70,
+                    Expanded(
+                      // Add Expanded here
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Manage Your",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white70,
+                            ),
                           ),
-                        ),
-                        Consumer<TeamProvider>(
-                          builder: (context, teamProvider, child) {
-                            return Text(
-                              teamProvider.teamName,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                          Consumer<TeamProvider>(
+                            builder: (context, teamProvider, child) {
+                              return Text(
+                                teamProvider.teamName,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1, // Add maxLines
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                     Row(
                       children: [
