@@ -58,6 +58,14 @@
           }
         },
         {
+          "client_id": "756855490028-in249hdb08f3vi5ldhggh2rkngm1ttkt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tactix_academy_manager",
+            "certificate_hash": "895fa92fe7130e8561c99ff36e1ecb6697024c30"
+          }
+        },
+        {
           "client_id": "756855490028-2lbsfe3lltmk7u55na4g0v9pbdm7f870.apps.googleusercontent.com",
           "client_type": 3
         }
