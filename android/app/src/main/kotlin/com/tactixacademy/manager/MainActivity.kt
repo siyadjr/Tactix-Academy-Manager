@@ -1,4 +1,4 @@
-package com.example.tactix_academy_manager
+package com.tactixacademy.manager
 
 import io.flutter.embedding.android.FlutterActivity
 

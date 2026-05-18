@@ -1,6 +1,6 @@
 plugins {
     id "com.android.application"
-    id 'com.google.gms.google-services'  // FlutterFire
+    id "com.google.gms.google-services"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -17,43 +17,54 @@ def flutterVersionCode = localProperties.getProperty("flutter.versionCode") ?: "
 def flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "1.0"
 
 def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
+def keystorePropertiesFile = rootProject.file("key.properties")
+def hasKeystore = false
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    hasKeystore = true
+    println("✔️ key.properties loaded successfully.")
 } else {
-    throw new FileNotFoundException("key.properties file not found!")
+    println("⚠️ key.properties not found. Skipping release signing config.")
 }
 
 android {
-    namespace "com.example.tactix_academy_manager"
-    compileSdkVersion flutter.compileSdkVersion.toInteger()
+    namespace "com.tactixacademy.manager"
+    compileSdk 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17  // Updated to Java 17
+        targetCompatibility JavaVersion.VERSION_17  // Updated to Java 17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'  // Updated JVM target
     }
 
     defaultConfig {
-        applicationId "com.example.tactix_academy_manager"
-        minSdkVersion 23
-        targetSdkVersion flutter.targetSdkVersion.toInteger()
+        applicationId "com.tactixacademy.manager"
+        minSdkVersion flutter.minSdkVersion
+        targetSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+            if (hasKeystore) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (hasKeystore) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -69,5 +80,5 @@ flutter {
 }
 
 dependencies {
-    // Add any additional dependencies here
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }

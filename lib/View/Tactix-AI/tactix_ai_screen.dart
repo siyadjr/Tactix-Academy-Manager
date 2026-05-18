@@ -10,35 +10,32 @@ class TactixAiScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => TactixAiProvider(),
-      child: Consumer<TactixAiProvider>(
-        builder: (context, provider, child) {
-          return Scaffold(
-            body: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('Assets/tactix-bot.jpg'),
-                  opacity: 0.7,
-                  fit: BoxFit.cover,
-                ),
-                gradient: LinearGradient(
-                  colors: [backGroundColor, mainTextColour],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+    return Consumer<TactixAiProvider>(
+      builder: (context, provider, child) {
+        return Scaffold(
+          body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('Assets/tactix-bot.jpg'),
+                opacity: 0.7,
+                fit: BoxFit.cover,
               ),
-              child: Column(
-                children: [
-                  buildAppBar(context, provider),
-                  if (provider.messages.isEmpty) buildWelcomeCard(context),
-                  Expanded(child: buildChat(provider)),
-                ],
+              gradient: LinearGradient(
+                colors: [backGroundColor, mainTextColour],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
-          );
-        },
-      ),
+            child: Column(
+              children: [
+                buildAppBar(context, provider),
+                if (provider.messages.isEmpty) buildWelcomeCard(context),
+                Expanded(child: buildChat(provider)),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

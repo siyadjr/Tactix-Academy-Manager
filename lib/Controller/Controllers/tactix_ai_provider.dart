@@ -1,9 +1,12 @@
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:tactix_academy_manager/Controller/Api/gemini_ai.dart';
 
 class TactixAiProvider extends ChangeNotifier {
-  final Gemini tactixAi = Gemini.instance;
+  late final GenerativeModel _model;
+  late ChatSession _chat;
+
   List<ChatMessage> _messages = [];
   bool _isLoading = false;
 
@@ -14,46 +17,73 @@ class TactixAiProvider extends ChangeNotifier {
   final ChatUser geminiUser = ChatUser(
     id: '1',
     firstName: 'TactixAI',
-    profileImage: 'https://res.cloudinary.com/dplpu9uc5/image/upload/v1736923321/tactix-bot_h6j5as.jpg',
+    profileImage:
+        'https://res.cloudinary.com/dplpu9uc5/image/upload/v1736923321/tactix-bot_h6j5as.jpg',
   );
 
-  void sendMessage(ChatMessage chatMessage) {
+  TactixAiProvider() {
+    _model = GenerativeModel(
+      model: 'gemini-1.5-flash-latest',
+      apiKey: GEMINI_API_KEY,
+    );
+    _chat = _model.startChat();
+  }
+
+  void sendMessage(ChatMessage chatMessage) async {
+    debugPrint("--- Sending Message to Gemini: ${chatMessage.text} ---");
     _messages = [chatMessage, ..._messages];
     _isLoading = true;
     notifyListeners();
 
-    tactixAi.streamGenerateContent(chatMessage.text).listen(
-      (event) {
-        final response = event.content?.parts?.fold('', (prev, curr) => '$prev ${curr.text}') ?? '';
-        ChatMessage message = ChatMessage(
-          user: geminiUser,
-          createdAt: DateTime.now(),
-          text: response,
-        );
-        _messages = [message, ..._messages];
-        notifyListeners();
-      },
-      onDone: () {
-        _isLoading = false;
-        notifyListeners();
-      },
-      onError: (error) {
-        _isLoading = false;
-        _messages = [
-          ChatMessage(
+    String fullResponse = "";
+    ChatMessage? geminiMessage;
+
+    try {
+      final content = Content.text(chatMessage.text);
+      final responseStream = _chat.sendMessageStream(content);
+
+      await for (final response in responseStream) {
+        final chunk = response.text ?? "";
+        debugPrint("--- Received Chunk: $chunk ---");
+        fullResponse += chunk;
+
+        if (geminiMessage == null) {
+          geminiMessage = ChatMessage(
             user: geminiUser,
             createdAt: DateTime.now(),
-            text: 'Sorry, I encountered an error. Please try again.',
-          ),
-          ..._messages
-        ];
+            text: fullResponse,
+          );
+          _messages = [geminiMessage!, ..._messages];
+        } else {
+          geminiMessage = ChatMessage(
+            user: geminiUser,
+            createdAt: geminiMessage!.createdAt,
+            text: fullResponse,
+          );
+          _messages[0] = geminiMessage!;
+        }
         notifyListeners();
-      },
-    );
+      }
+      debugPrint("--- Gemini Result Finished ---");
+    } catch (e) {
+      debugPrint("--- Gemini Error Encountered: $e ---");
+      _messages = [
+        ChatMessage(
+          user: geminiUser,
+          createdAt: DateTime.now(),
+          text: 'Sorry, I encountered an error: $e',
+        ),
+        ..._messages
+      ];
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   void clearMessages() {
     _messages.clear();
+    _chat = _model.startChat(); // Restart chat session
     notifyListeners();
   }
 }

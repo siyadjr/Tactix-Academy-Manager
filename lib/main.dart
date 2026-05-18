@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:provider/provider.dart';
-import 'package:tactix_academy_manager/Controller/Api/gemini_ai.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/add_session_controller.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/attendance_overall_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/attendence_provider.dart';
@@ -19,6 +17,7 @@ import 'package:tactix_academy_manager/Controller/Controllers/session_details_pr
 import 'package:tactix_academy_manager/Controller/Controllers/team_profile_controller.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/todays_attendance_provider.dart';
 import 'package:tactix_academy_manager/Controller/Controllers/user_profile_controller.dart';
+import 'package:tactix_academy_manager/Controller/Controllers/tactix_ai_provider.dart';
 import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/View/Authentications/splash_screen.dart';
 import 'package:tactix_academy_manager/firebase_options.dart';
@@ -26,7 +25,6 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Gemini.init(apiKey: GEMINI_API_KEY);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -53,9 +51,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
         ChangeNotifierProvider(create: (_) => PaymentsDetailsProvider()),
         ChangeNotifierProvider(create: (_) => PaymentSpecificController()),
-        ChangeNotifierProvider(create: (_) => PaymentSpecificController()),
         ChangeNotifierProvider(create: (_) => UserProfileController()),
         ChangeNotifierProvider(create: (_) => TeamProfileController()),
+        ChangeNotifierProvider(create: (_) => TactixAiProvider()),
       ],
       child: const MyApp(),
     ),
