@@ -102,12 +102,14 @@ class PaymentDisabledMessage extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Learn more about payments',
-                style: TextStyle(
-                  color: secondTextColour.withOpacity(0.9),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+              Flexible(
+                child: Text(
+                  'Learn more about payments',
+                  style: TextStyle(
+                    color: secondTextColour.withOpacity(0.9),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               const SizedBox(width: 8),

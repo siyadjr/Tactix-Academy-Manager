@@ -23,7 +23,7 @@ class TactixAiProvider extends ChangeNotifier {
 
   TactixAiProvider() {
     _model = GenerativeModel(
-      model: 'gemini-1.5-flash-latest',
+      model: 'gemini-2.5-flash',
       apiKey: GEMINI_API_KEY,
     );
     _chat = _model.startChat();

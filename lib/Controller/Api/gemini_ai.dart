@@ -1,1 +1,4 @@
-const String GEMINI_API_KEY = 'AIzaSyDKDLjlwihfW-HL86_W1KKWZMcuOWVwdiY';
+import 'package:tactix_academy_manager/Core/Env/env_config.dart';
+
+const String GEMINI_API_KEY = EnvConfig.geminiApiKey;
+

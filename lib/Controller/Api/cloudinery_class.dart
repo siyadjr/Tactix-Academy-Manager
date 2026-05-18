@@ -4,11 +4,13 @@ import 'dart:developer';
 import 'package:cloudinary/cloudinary.dart'
     as cloudinary_sdk; 
 
+import 'package:tactix_academy_manager/Core/Env/env_config.dart';
+
 class CloudineryClass {
   final _cloudinary = cloudinary_sdk.Cloudinary.signedConfig(
-    apiKey: "786232266633578",
-    apiSecret: "zcTdd4tyRX_ks2_Ze19LI5wZ0us",
-    cloudName: "dplpu9uc5",
+    apiKey: EnvConfig.cloudinaryApiKey,
+    apiSecret: EnvConfig.cloudinaryApiSecret,
+    cloudName: EnvConfig.cloudinaryCloudName,
   );
 
   Future<void> uploadLicense(String imagePath) async {
