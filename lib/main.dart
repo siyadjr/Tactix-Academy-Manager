@@ -22,12 +22,14 @@ import 'package:tactix_academy_manager/Core/Theme/app_colours.dart';
 import 'package:tactix_academy_manager/View/Authentications/splash_screen.dart';
 import 'package:tactix_academy_manager/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tactix_academy_manager/service/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await NotificationService().init();
   runApp(
     MultiProvider(
       providers: [

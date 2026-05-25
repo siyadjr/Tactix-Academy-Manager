@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tactix_academy_manager/Controller/Api/cloudinery_class.dart';
@@ -45,7 +46,14 @@ class UserDatbase {
       if (user == null) throw Exception('User creation failed');
 
       try {
-        // Store user data in Firestore
+        // Store user data in Firestore with FCM Token
+        String? fcmToken;
+        try {
+          fcmToken = await FirebaseMessaging.instance.getToken();
+        } catch (e) {
+          log("Failed to get FCM token during signup: $e");
+        }
+
         await _firestore.collection('Managers').doc(user.uid).set({
           'name': name.isNotEmpty ? name : 'Unknown',
           'email': email,
@@ -53,7 +61,8 @@ class UserDatbase {
           'licenseUrl': 'Not Assigned',
           'license status': 'Not Assigned',
           'userProfile':
-              'https://res.cloudinary.com/dplpu9uc5/image/upload/v1734508378/Default_avatar_uznlbr.jpg'
+              'https://res.cloudinary.com/dplpu9uc5/image/upload/v1734508378/Default_avatar_uznlbr.jpg',
+          'fcmToken': fcmToken ?? 'Not Assigned',
         });
 
         userId = user.uid;
@@ -106,6 +115,17 @@ class UserDatbase {
         userId = managerDoc.docs.first.id;
         SharedPrefFunctions().sharePrefLogged();
         
+        // Update FCM Token for existing user logging in
+        try {
+          String? token = await FirebaseMessaging.instance.getToken();
+          if (token != null) {
+            await _firestore.collection('Managers').doc(userId).update({
+              'fcmToken': token,
+            });
+          }
+        } catch (e) {
+          log("Failed to update FCM token during existing Google login: $e");
+        }
 
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (ctx) => const HomeScreen()));
@@ -117,13 +137,21 @@ class UserDatbase {
         final photo = await CloudineryClass()
             .uploadPhoto(user.photoURL ?? _defaultAvatarUrl);
 
+        String? fcmToken;
+        try {
+          fcmToken = await FirebaseMessaging.instance.getToken();
+        } catch (e) {
+          log("Failed to get FCM token during Google signup: $e");
+        }
+
         await _firestore.collection('Managers').doc(user.uid).set({
           'name': user.displayName ?? 'Google User',
           'email': user.email,
           'userProfile': photo,
           'teamId': 'Not Assigned',
           'licenseUrl': 'Not Assigned',
-          'license status': 'Not Assigned'
+          'license status': 'Not Assigned',
+          'fcmToken': fcmToken ?? 'Not Assigned',
         });
 
         SharedPrefFunctions().sharedPrefSignup();
@@ -178,6 +206,19 @@ class UserDatbase {
       }
 
       userId = userDoc.id;
+      
+      // Update FCM Token during email sign in
+      try {
+        String? token = await FirebaseMessaging.instance.getToken();
+        if (token != null) {
+          await _firestore.collection('Managers').doc(userId).update({
+            'fcmToken': token,
+          });
+        }
+      } catch (e) {
+        log("Failed to update FCM token during login: $e");
+      }
+
       await SharedPrefFunctions().sharePrefTeamCreated();
       Navigator.pushReplacement(
         context,
@@ -371,6 +412,23 @@ class UserDatbase {
           .collection('Managers')
           .doc(userId)
           .update({'userProfile': newImage});
+    }
+  }
+
+  Future<void> updateFcmToken() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user != null) {
+        String? token = await FirebaseMessaging.instance.getToken();
+        if (token != null) {
+          await _firestore.collection('Managers').doc(user.uid).update({
+            'fcmToken': token,
+          });
+          log("FCM Token updated successfully: $token");
+        }
+      }
+    } catch (e) {
+      log("Failed to update FCM token: $e");
     }
   }
 
